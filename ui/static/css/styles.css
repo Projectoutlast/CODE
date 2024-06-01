@@ -1,52 +1,44 @@
-/* styles.css */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 header {
     background-color: #333;
-    color: #fff;
+    color: white;
     padding: 1rem;
-    text-align: center;
 }
 
-nav {
-    background-color: #444;
-    color: #fff;
-    padding: 0.5rem;
-    text-align: center;
+nav ul {
+    list-style: none;
+    padding: 0;
 }
 
-nav a {
-    color: #fff;
-    margin: 0 1rem;
+nav ul li {
+    display: inline;
+    margin-right: 1rem;
+}
+
+nav ul li a {
+    color: white;
     text-decoration: none;
 }
 
-.container {
-    padding: 2rem;
+nav ul li a:hover {
+    text-decoration: underline;
 }
 
-h1, h2, h3 {
-    color: #333;
+main {
+    padding: 2rem;
 }
 
 footer {
     background-color: #333;
-    color: #fff;
+    color: white;
     text-align: center;
     padding: 1rem;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
-}
-
-@media (max-width: 768px) {
-    nav a {
-        display: block;
-        margin: 1rem 0;
-    }
 }

@@ -3,6 +3,8 @@ package routes
 import "github.com/gorilla/mux"
 
 func SetUpRoutes(r *mux.Router) {
+	r.HandleFunc("/", index).Methods("GET")
+
 	main := r.PathPrefix("/").Subrouter()
 	main.HandleFunc("/introduction", introduction).Methods("GET")
 	main.HandleFunc("/main-proposals", mainProposals).Methods("GET")

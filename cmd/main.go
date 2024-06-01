@@ -22,5 +22,11 @@ func main() {
 	r := mux.NewRouter()
 
 	routes.SetUpRoutes(r)
-	http.ListenAndServe(cfg.PORT, r)
+
+	fileServer := http.FileServer(http.Dir("./ui/static/"))
+
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static", fileServer))
+
+	err = http.ListenAndServe(cfg.PORT, r)
+	log.Fatal(err)
 }
