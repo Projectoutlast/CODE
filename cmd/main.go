@@ -1,8 +1,8 @@
 package main
 
 import (
-	"code/config"
-	"code/site/routes"
+	"code/internal/config"
+	"code/internal/routes"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"log"
