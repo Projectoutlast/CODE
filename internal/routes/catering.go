@@ -1,11 +1,33 @@
 package routes
 
-import "net/http"
+import (
+	"html/template"
+	"log"
+	"net/http"
+)
 
-func cateringOrder(w http.ResponseWriter, r *http.Request) {
-	panic("not implemented")
-}
+func menuForCatering(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		w.Header().Set("Allow", http.MethodGet)
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		return
+	}
 
-func cateringFAQ(w http.ResponseWriter, r *http.Request) {
-	panic("not implemented")
+	files := []string{
+		"./ui/html/cateringMenu.page.html",
+		"./ui/html/base.layout.html",
+	}
+
+	tmpl, err := template.ParseFiles(files...)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	if err := tmpl.Execute(w, nil); err != nil {
+		log.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
 }

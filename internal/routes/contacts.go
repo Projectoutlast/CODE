@@ -1,19 +1,33 @@
 package routes
 
-import "net/http"
+import (
+	"html/template"
+	"log"
+	"net/http"
+)
 
-func address(w http.ResponseWriter, r *http.Request) {
-	panic("not implemented")
-}
+func contacts(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		w.Header().Set("Allow", http.MethodGet)
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		return
+	}
 
-func phone(w http.ResponseWriter, r *http.Request) {
-	panic("not implemented")
-}
+	files := []string{
+		"./ui/html/contacts.page.html",
+		"./ui/html/base.layout.html",
+	}
 
-func email(w http.ResponseWriter, r *http.Request) {
-	panic("not implemented")
-}
+	tmpl, err := template.ParseFiles(files...)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
 
-func socialNetwork(w http.ResponseWriter, r *http.Request) {
-	panic("not implemented")
+	if err := tmpl.Execute(w, nil); err != nil {
+		log.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
 }

@@ -1,27 +1,33 @@
 package routes
 
 import (
-	"fmt"
+	"html/template"
+	"log"
 	"net/http"
 )
 
-func ourHistory(w http.ResponseWriter, r *http.Request) {
-	_, err := fmt.Fprintf(w, "Our History, URL: %s", r.URL.Path[1:])
-	if err != nil {
+func about(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		w.Header().Set("Allow", http.MethodGet)
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
 	}
-}
 
-func team(w http.ResponseWriter, r *http.Request) {
-	_, err := fmt.Fprintf(w, "Team, URL: %s", r.URL.Path[1:])
+	files := []string{
+		"./ui/html/aboutUs.page.html",
+		"./ui/html/base.layout.html",
+	}
+
+	tmpl, err := template.ParseFiles(files...)
 	if err != nil {
+		log.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
-}
 
-func missionAndValues(w http.ResponseWriter, r *http.Request) {
-	_, err := fmt.Fprintf(w, "Team, URL: %s", r.URL.Path[1:])
-	if err != nil {
+	if err := tmpl.Execute(w, nil); err != nil {
+		log.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 }
