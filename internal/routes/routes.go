@@ -24,6 +24,5 @@ func SetUpRoutes(r *mux.Router) {
 
 func SetUpFileServer(r *mux.Router) {
 	fs := http.FileServer(utils.NeuteredFileSystem{Fs: http.Dir("./ui/static")})
-	r.PathPrefix("/static").Handler(http.NotFoundHandler())
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static", fs))
 }
