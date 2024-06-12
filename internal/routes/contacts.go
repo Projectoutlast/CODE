@@ -2,12 +2,12 @@ package routes
 
 import (
 	"html/template"
-	"log"
 	"net/http"
 )
 
-func contacts(w http.ResponseWriter, r *http.Request) {
+func (h *Handlers) contacts(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
+		h.log.Warn("restricted method", "method", r.Method)
 		w.Header().Set("Allow", http.MethodGet)
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
@@ -20,13 +20,13 @@ func contacts(w http.ResponseWriter, r *http.Request) {
 
 	tmpl, err := template.ParseFiles(files...)
 	if err != nil {
-		log.Println(err)
+		h.log.Warn("failed to parse template", "err", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 
 	if err := tmpl.Execute(w, nil); err != nil {
-		log.Println(err)
+		h.log.Warn("failed to execute template", "err", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
