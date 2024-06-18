@@ -23,7 +23,7 @@ func SetUpRoutes(r *mux.Router, handlers *Handlers, middleware *middleware.Middl
 	r.HandleFunc("/user-agreement", middleware.Logging(handlers.userAgreement)).Methods("GET")
 }
 
-func SetUpFileServer(r *mux.Router) {
-	fs := http.FileServer(utils.NeuteredFileSystem{Fs: http.Dir("./ui/static")})
+func SetUpFileServer(r *mux.Router, pathToStatic string) {
+	fs := http.FileServer(utils.NeuteredFileSystem{Fs: http.Dir(pathToStatic)})
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static", fs))
 }

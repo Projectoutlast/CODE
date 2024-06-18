@@ -11,11 +11,12 @@ import (
 )
 
 func main() {
-	var storagePath, migrationsPath, migrationsTable string
+	var storagePath, migrationsPath, migrationsTable, direction string
 
 	flag.StringVar(&storagePath, "storage-path", "", "Path to storage")
 	flag.StringVar(&migrationsPath, "migrations-path", "", "Path to migrations")
 	flag.StringVar(&migrationsTable, "migrations-table", "", "Path to migrations table")
+	flag.StringVar(&direction, "direction", "up", "Direction to migrate")
 	flag.Parse()
 
 	if storagePath == "" {
@@ -35,13 +36,24 @@ func main() {
 		panic(err)
 	}
 
-	if err := m.Up(); err != nil {
-		if errors.Is(err, migrate.ErrNoChange) {
-			fmt.Println("no migrations to apply")
-
-			return
+	switch direction {
+	case "down":
+		if err = m.Down(); err != nil {
+			if errors.Is(err, migrate.ErrNoChange) {
+				fmt.Println("no migrations to apply")
+				return
+			}
+			panic(err)
 		}
-
-		panic(err)
+	case "up":
+		if err = m.Up(); err != nil {
+			if errors.Is(err, migrate.ErrNoChange) {
+				fmt.Println("no migrations to apply")
+				return
+			}
+			panic(err)
+		}
+	default:
+		panic("invalid direction specified. Use 'up' or 'down'.")
 	}
 }

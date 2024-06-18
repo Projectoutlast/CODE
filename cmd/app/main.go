@@ -30,7 +30,7 @@ func main() {
 
 	r := mux.NewRouter()
 	routes.SetUpRoutes(r, handlers, middlewares)
-	routes.SetUpFileServer(r)
+	routes.SetUpFileServer(r, cfg.StaticDir)
 
 	newLogger.Info("Starting server on", slog.String("port", cfg.Port))
 	err = http.ListenAndServe(cfg.Port, r)
