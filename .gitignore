@@ -18,3 +18,5 @@ go.work.sum
 .idea/*
 *.env
 *config.go
+
+*.db

@@ -32,7 +32,7 @@ func main() {
 	routes.SetUpRoutes(r, handlers, middlewares)
 	routes.SetUpFileServer(r)
 
-	newLogger.Info("Starting server on", slog.String("port", cfg.PORT))
-	err = http.ListenAndServe(cfg.PORT, r)
+	newLogger.Info("Starting server on", slog.String("port", cfg.Port))
+	err = http.ListenAndServe(cfg.Port, r)
 	log.Fatal(err)
 }
