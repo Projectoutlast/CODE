@@ -1,11 +1,11 @@
-package routes
+package site
 
 import (
 	"html/template"
 	"net/http"
 )
 
-func (h *Handlers) mainMenu(w http.ResponseWriter, r *http.Request) {
+func (h *Handlers) MainMenu(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		h.log.Warn("restricted method", "method", r.Method)
 		w.Header().Set("Allow", http.MethodGet)

@@ -5,11 +5,13 @@ import (
 	"code/internal/logger"
 	"code/internal/middleware"
 	"code/internal/routes"
-	"github.com/gorilla/mux"
-	"github.com/joho/godotenv"
+	"code/internal/routes/site"
 	"log"
 	"log/slog"
 	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -24,7 +26,7 @@ func main() {
 
 	newLogger := logger.NewLogger(cfg.LogLevel)
 
-	handlers := routes.NewHandlers(newLogger)
+	handlers := site.NewHandlers(newLogger)
 
 	middlewares := middleware.NewMiddleware(newLogger)
 
