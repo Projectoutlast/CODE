@@ -2,11 +2,27 @@ package admin
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
 )
 
 func (h *AdminHandlers) Menu(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Menu page")
+	files := []string{
+		"./ui/html/admin/menu.page.html",
+	}
+
+	tmpl, err := template.ParseFiles(files...)
+	if err != nil {
+		h.log.Error(err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	if err = tmpl.Execute(w, nil); err != nil {
+		h.log.Error(err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *AdminHandlers) TheMenuType(w http.ResponseWriter, r *http.Request) {

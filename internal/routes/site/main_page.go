@@ -12,8 +12,8 @@ func (h *MainHandlers) Index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	files := []string{
-		"./ui/html/index.page.html",
-		"./ui/html/base.layout.html",
+		"./ui/html/site/index.page.html",
+		baseHTMLLayout,
 	}
 
 	tmpl, err := template.ParseFiles(files...)

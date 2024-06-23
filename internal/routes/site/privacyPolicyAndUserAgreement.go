@@ -7,8 +7,8 @@ import (
 
 func (h *MainHandlers) PrivacyPolicy(w http.ResponseWriter, r *http.Request) {
 	files := []string{
-		"./ui/html/privacyPolicy.page.html",
-		"./ui/html/base.layout.html",
+		"./ui/html/site/privacyPolicy.page.html",
+		baseHTMLLayout,
 	}
 
 	tmpl, err := template.ParseFiles(files...)
@@ -27,8 +27,8 @@ func (h *MainHandlers) PrivacyPolicy(w http.ResponseWriter, r *http.Request) {
 
 func (h *MainHandlers) UserAgreement(w http.ResponseWriter, r *http.Request) {
 	files := []string{
-		"./ui/html/userAgreement.page.html",
-		"./ui/html/base.layout.html",
+		"./ui/html/site/userAgreement.page.html",
+		baseHTMLLayout,
 	}
 
 	tmpl, err := template.ParseFiles(files...)

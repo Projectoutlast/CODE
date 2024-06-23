@@ -7,8 +7,8 @@ import (
 
 func (h *MainHandlers) MainMenu(w http.ResponseWriter, r *http.Request) {
 	files := []string{
-		"./ui/html/mainMenu.page.html",
-		"./ui/html/base.layout.html",
+		"./ui/html/site/mainMenu.page.html",
+		baseHTMLLayout,
 	}
 
 	tmpl, err := template.ParseFiles(files...)

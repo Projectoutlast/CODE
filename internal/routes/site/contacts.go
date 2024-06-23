@@ -7,8 +7,8 @@ import (
 
 func (h *MainHandlers) Contacts(w http.ResponseWriter, r *http.Request) {
 	files := []string{
-		"./ui/html/contacts.page.html",
-		"./ui/html/base.layout.html",
+		"./ui/html/site/contacts.page.html",
+		baseHTMLLayout,
 	}
 
 	tmpl, err := template.ParseFiles(files...)

@@ -7,8 +7,8 @@ import (
 
 func (h *MainHandlers) NewsAndEvents(w http.ResponseWriter, r *http.Request) {
 	files := []string{
-		"./ui/html/newsAndEvents.page.html",
-		"./ui/html/base.layout.html",
+		"./ui/html/site/newsAndEvents.page.html",
+		baseHTMLLayout,
 	}
 
 	tmpl, err := template.ParseFiles(files...)
