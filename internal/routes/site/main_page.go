@@ -5,14 +5,7 @@ import (
 	"net/http"
 )
 
-func (h *Handlers) Index(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		h.log.Warn("restricted method", "method", r.Method)
-		w.Header().Set("Allow", http.MethodGet)
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
-		return
-	}
-
+func (h *MainHandlers) Index(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
 		return

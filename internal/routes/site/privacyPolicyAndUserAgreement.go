@@ -5,14 +5,7 @@ import (
 	"net/http"
 )
 
-func (h *Handlers) PrivacyPolicy(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		h.log.Warn("restricted method", "method", r.Method)
-		w.Header().Set("Allow", http.MethodGet)
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
-		return
-	}
-
+func (h *MainHandlers) PrivacyPolicy(w http.ResponseWriter, r *http.Request) {
 	files := []string{
 		"./ui/html/privacyPolicy.page.html",
 		"./ui/html/base.layout.html",
@@ -32,14 +25,7 @@ func (h *Handlers) PrivacyPolicy(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handlers) UserAgreement(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		h.log.Warn("restricted method", "method", r.Method)
-		w.Header().Set("Allow", http.MethodGet)
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
-		return
-	}
-
+func (h *MainHandlers) UserAgreement(w http.ResponseWriter, r *http.Request) {
 	files := []string{
 		"./ui/html/userAgreement.page.html",
 		"./ui/html/base.layout.html",

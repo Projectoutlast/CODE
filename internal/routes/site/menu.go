@@ -5,14 +5,7 @@ import (
 	"net/http"
 )
 
-func (h *Handlers) MainMenu(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		h.log.Warn("restricted method", "method", r.Method)
-		w.Header().Set("Allow", http.MethodGet)
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
-		return
-	}
-
+func (h *MainHandlers) MainMenu(w http.ResponseWriter, r *http.Request) {
 	files := []string{
 		"./ui/html/mainMenu.page.html",
 		"./ui/html/base.layout.html",

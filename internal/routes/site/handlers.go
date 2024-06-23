@@ -2,10 +2,10 @@ package site
 
 import "log/slog"
 
-type Handlers struct {
+type MainHandlers struct {
 	log *slog.Logger
 }
 
-func NewHandlers(log *slog.Logger) *Handlers {
-	return &Handlers{log: log}
+func NewMainHandlers(log *slog.Logger) *MainHandlers {
+	return &MainHandlers{log: log}
 }

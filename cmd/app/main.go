@@ -5,6 +5,7 @@ import (
 	"code/internal/logger"
 	"code/internal/middleware"
 	"code/internal/routes"
+	"code/internal/routes/admin"
 	"code/internal/routes/site"
 	"log"
 	"log/slog"
@@ -26,12 +27,14 @@ func main() {
 
 	newLogger := logger.NewLogger(cfg.LogLevel)
 
-	handlers := site.NewHandlers(newLogger)
+	siteHandlers := site.NewMainHandlers(newLogger)
+	adminHandlers := admin.NewAdminHandlers(newLogger)
 
 	middlewares := middleware.NewMiddleware(newLogger)
 
 	r := mux.NewRouter()
-	routes.SetUpRoutes(r, handlers, middlewares)
+
+	routes.SetUpRoutes(r, siteHandlers, adminHandlers, middlewares)
 	routes.SetUpFileServer(r, cfg.StaticDir)
 
 	newLogger.Info("Starting server on", slog.String("port", cfg.Port))
