@@ -1,49 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Menu</title>
-    <link rel="stylesheet" href="static/css/admin.css">
-</head>
-<body>
-    <header>
-        <h1>Menu</h1>
-    </header>
-    <nav>
-        <a href="index.html">Dashboard</a>
-        <a href="employees.html">Employees</a>
-        <a href="menu.html">Menu</a>
-        <a href="dishes.html">Dishes</a>
-        <a href="events.html">Events</a>
-    </nav>
-    <div class="container">
-        <h2>Menu</h2>
-        <button onclick="window.location.href='menu_type_create.html'">Add Menu Type</button>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Type</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Example Menu Type Row -->
-                <tr>
-                    <td>1</td>
-                    <td>Appetizers</td>
-                    <td>
-                        <button onclick="window.location.href='menu_type_view.html?id=1'">View</button>
-                        <button onclick="window.location.href='menu_type_edit.html?id=1'">Edit</button>
-                        <button onclick="window.location.href='menu_type_delete.html?id=1'">Delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <footer>
-        <p>&copy; 2024 Restaurant Admin Panel. All rights reserved.</p>
-    </footer>
-</body>
-</html>
+{{template "base" .}}
+
+{{define "title"}}Типы меню{{end}}
+
+{{define "main"}}
+<h2>Menu</h2>
+<button onclick="window.location.href='menu_type_create.html'">Add Menu Type</button>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Example Menu Type Row -->
+        <tr>
+            <td>1</td>
+            <td>Appetizers</td>
+            <td>
+                <button onclick="window.location.href='menu_type_view.html?id=1'">View</button>
+                <button onclick="window.location.href='menu_type_edit.html?id=1'">Edit</button>
+                <button onclick="window.location.href='menu_type_delete.html?id=1'">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{{end}}

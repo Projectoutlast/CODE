@@ -1,0 +1,11 @@
+{{template "base" .}}
+
+{{define "title"}}Тип меню{{end}}
+
+{{define "main"}}
+<h2>Menu Type Details</h2>
+<p>ID: 1</p>
+<p>Type: Appetizers</p>
+<button onclick="window.location.href='menu_type_edit.html?id=1'">Edit</button>
+<button onclick="window.location.href='menu_type_delete.html?id=1'">Delete</button>
+{{end}}

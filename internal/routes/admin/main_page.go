@@ -8,6 +8,7 @@ import (
 func (h *AdminHandlers) Index(w http.ResponseWriter, r *http.Request) {
 	files := []string{
 		"./ui/html/admin/index.page.html",
+		baseHTMLLayout,
 	}
 
 	tmpl, err := template.ParseFiles(files...)

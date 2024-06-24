@@ -1,0 +1,29 @@
+{{template "base" .}}
+
+{{define "title"}}Категории{{end}}
+
+{{define "main"}}
+<h2>Menu Categories</h2>
+<button onclick="window.location.href='menu_category_create.html'">Add Category</button>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Example Category Row -->
+        <tr>
+            <td>1</td>
+            <td>Starters</td>
+            <td>
+                <button onclick="window.location.href='menu_category_view.html?id=1'">View</button>
+                <button onclick="window.location.href='menu_category_edit.html?id=1'">Edit</button>
+                <button onclick="window.location.href='menu_category_delete.html?id=1'">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{{end}}

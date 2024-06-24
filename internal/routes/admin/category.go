@@ -3,14 +3,48 @@ package admin
 import (
 	"fmt"
 	"net/http"
+	"text/template"
 )
 
 func (h *AdminHandlers) Categories(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Categories page")
+	files := []string{
+		"./ui/html/admin/category.page.html",
+		baseHTMLLayout,
+	}
+
+	tmpl, err := template.ParseFiles(files...)
+	if err != nil {
+		h.log.Error(err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	if err = tmpl.Execute(w, nil); err != nil {
+		h.log.Error(err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *AdminHandlers) TheCategory(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "The category page")
+	files := []string{
+		"./ui/html/admin/category_view.page.html",
+		baseHTMLLayout,
+	}
+	
+	tmpl, err := template.ParseFiles(files...)
+	if err != nil {
+		h.log.Error(err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	if err = tmpl.Execute(w, nil); err != nil {
+		h.log.Error(err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
 }
 
 func (h *AdminHandlers) EditCategory(w http.ResponseWriter, r *http.Request) {
