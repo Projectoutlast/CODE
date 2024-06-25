@@ -48,11 +48,43 @@ func (h *AdminHandlers) TheCategory(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *AdminHandlers) EditCategory(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Edit category page")
+	files := []string{
+		"./ui/html/admin/category_edit.page.html",
+		baseHTMLLayout,
+	}
+
+	tmpl, err := template.ParseFiles(files...)
+	if err != nil {
+		h.log.Error(err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	if err = tmpl.Execute(w, nil); err != nil {
+		h.log.Error(err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *AdminHandlers) CreateCategory(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Create category page")
+	files := []string{
+		"./ui/html/admin/category_create.page.html",
+		baseHTMLLayout,
+	}
+
+	tmpl, err := template.ParseFiles(files...)
+	if err != nil {
+		h.log.Error(err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	if err = tmpl.Execute(w, nil); err != nil {
+		h.log.Error(err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *AdminHandlers) DeleteCategory(w http.ResponseWriter, r *http.Request) {

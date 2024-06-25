@@ -1,0 +1,16 @@
+{{template "base" .}}
+
+{{define "title"}}Редактирование события{{end}}
+
+{{define "main"}}
+<h2>Edit Event</h2>
+<form action="#" method="POST">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" value="Summer Festival" required>
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" value="2024-07-20" required>
+    <label for="location">Location:</label>
+    <input type="text" id="location" name="location" value="Main Hall" required>
+    <input type="submit" value="Save Changes">
+</form>
+{{end}}

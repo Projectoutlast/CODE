@@ -1,0 +1,12 @@
+{{template "base" .}}
+
+{{define "title"}}Создание категории меню{{end}}
+
+{{define "main"}}
+<h2>Create New Category</h2>
+<form action="#" method="POST">
+    <label for="category">Category:</label>
+    <input type="text" id="category" name="category" required>
+    <input type="submit" value="Create">
+</form>
+{{end}}

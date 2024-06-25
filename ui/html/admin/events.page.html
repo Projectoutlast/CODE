@@ -1,0 +1,33 @@
+{{template "base" .}}
+
+{{define "title"}}Все события{{end}}
+
+{{define "main"}}
+<h2>Events</h2>
+<button onclick="window.location.href='event_create.html'">Add Event</button>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Example Event Row -->
+        <tr>
+            <td>1</td>
+            <td>Summer Festival</td>
+            <td>2024-07-20</td>
+            <td>Main Hall</td>
+            <td>
+                <button onclick="window.location.href='event_view.html?id=1'">View</button>
+                <button onclick="window.location.href='event_edit.html?id=1'">Edit</button>
+                <button onclick="window.location.href='event_delete.html?id=1'">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{{end}}

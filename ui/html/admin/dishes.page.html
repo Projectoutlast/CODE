@@ -1,0 +1,33 @@
+{{template "base" .}}
+
+{{define "title"}}Блюда{{end}}
+
+{{define "main"}}
+<h2>Dishes</h2>
+<button onclick="window.location.href='dish_create.html'">Add Dish</button>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Example Dish Row -->
+        <tr>
+            <td>1</td>
+            <td>Caesar Salad</td>
+            <td>$8.99</td>
+            <td>Salads</td>
+            <td>
+                <button onclick="window.location.href='dish_view.html?id=1'">View</button>
+                <button onclick="window.location.href='dish_edit.html?id=1'">Edit</button>
+                <button onclick="window.location.href='dish_delete.html?id=1'">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{{end}}
