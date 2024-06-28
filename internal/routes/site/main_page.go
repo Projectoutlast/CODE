@@ -23,9 +23,8 @@ func (h *MainHandlers) Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = tmpl.Execute(w, nil); err != nil {
-		h.log.Warn("failed to execute template", "err", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+
+	tmpl.Execute(w, nil)
 }

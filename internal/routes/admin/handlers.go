@@ -2,8 +2,7 @@ package admin
 
 import "log/slog"
 
-
-const baseHTMLLayout string = "./ui/html/admin/base.layout.html"
+const baseHTMLLayout string = "./ui/html/admin/admin_base.layout.html"
 
 type AdminHandlers struct {
 	log *slog.Logger

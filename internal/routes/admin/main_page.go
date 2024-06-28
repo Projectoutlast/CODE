@@ -7,7 +7,7 @@ import (
 
 func (h *AdminHandlers) Index(w http.ResponseWriter, r *http.Request) {
 	files := []string{
-		"./ui/html/admin/index.page.html",
+		"./ui/html/admin/admin_index.page.html",
 		baseHTMLLayout,
 	}
 
