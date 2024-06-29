@@ -4,21 +4,20 @@ import (
 	"code/internal/config"
 	"code/internal/logger"
 	"code/internal/middleware"
+	"code/internal/repository/sqlite"
 	"code/internal/routes"
 	"code/internal/routes/admin"
 	"code/internal/routes/site"
+	"database/sql"
 	"log"
 	"log/slog"
 	"net/http"
-	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	cwd, err := os.Getwd()
-	log.Printf("Current working directory: %s", cwd)
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -28,7 +27,18 @@ func main() {
 		log.Fatal(err)
 	}
 
+	db, err := sql.Open("sqlite3", cfg.SQLite.DataSource)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err = db.Ping(); err != nil {
+		log.Fatal(err)
+	}
+
 	newLogger := logger.NewLogger(cfg.LogLevel)
+
+	_ = sqlite.NewSQLiteRepository(newLogger, db)
 
 	siteHandlers := site.NewMainHandlers(newLogger)
 	adminHandlers := admin.NewAdminHandlers(newLogger)
