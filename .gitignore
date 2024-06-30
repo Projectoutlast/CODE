@@ -20,6 +20,7 @@ go.work.sum
 *config.go
 
 ./storage/*.db
+*.db
 
 *.vscode/
 .DS_Store
