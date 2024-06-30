@@ -1,17 +1,17 @@
 CREATE TABLE IF NOT EXISTS menu (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     menu_type VARCHAR NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS category (
-    id SERIAL PRIMARY KEY,
-    category_type VARCHAR NOT NULL,
-    category_dish VARCHAR NOT NULL,
-    FOREIGN KEY (category_type) REFERENCES menu(id)
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    menu_type VARCHAR NOT NULL,
+    category_dish VARCHAR UNIQUE NOT NULL,
+    FOREIGN KEY (menu_type) REFERENCES menu(menu_type)
 );
 
 CREATE TABLE IF NOT EXISTS dishes (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     dish_name VARCHAR UNIQUE NOT NULL,
     category_dish INTEGER NOT NULL,
     composition_of_the_dish VARCHAR NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS dishes (
 );
 
 CREATE TABLE IF NOT EXISTS events (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     event_name VARCHAR NOT NULL,
     description VARCHAR,
     event_date TIMESTAMP DEFAULT current_timestamp,
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS events (
 );
 
 CREATE TABLE IF NOT EXISTS admin_panel_users (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     login VARCHAR NOT NULL UNIQUE,
     password VARCHAR NOT NULL,
     email VARCHAR NOT NULL UNIQUE,

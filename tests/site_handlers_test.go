@@ -20,6 +20,7 @@ import (
 )
 
 func startTestHTTPServer() *site.MainHandlers {
+	err := os.Chdir("..")
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
 	}
