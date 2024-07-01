@@ -4,7 +4,6 @@ import (
 	"code/internal/logger"
 	"code/internal/repository/sqlite"
 	"database/sql"
-	"log"
 	"testing"
 
 	"code/tests/suits"
@@ -15,8 +14,17 @@ import (
 )
 
 func TestMenu(t *testing.T) {
+	t.Parallel()
+
 	logger := logger.NewLogger("dev")
-	sqliteRepository := sqlite.NewSQLiteRepository(logger, testDBInit())
+
+	db, err := sql.Open("sqlite3", ":memory:")
+
+	require.NoError(t, err)
+
+	require.NoError(t, createTables(db))
+
+	sqliteRepository := sqlite.NewSQLiteRepository(logger, db)
 
 	require.NotNil(t, sqliteRepository)
 
@@ -25,32 +33,70 @@ func TestMenu(t *testing.T) {
 		require.NoError(t, err)
 	}
 
-	err := sqliteRepository.DeleteMenu(suits.MenuTypes[3].MenuType)
+	newMenuType := "Безлактозное меню"
+	err = sqliteRepository.UpdateMenu(4, newMenuType)
 	require.NoError(t, err)
 
-	newMenuType := "Безглютеновое меню"
-	err = sqliteRepository.UpdateMenu(newMenuType, suits.MenuTypes[4].MenuType)
+	menuType, err := sqliteRepository.GetMenuType(4)
 	require.NoError(t, err)
-	require.NotEqual(t, suits.MenuTypes[1].MenuType, newMenuType)
+
+	require.NotEqual(t, menuType, suits.MenuTypes[3].MenuType)
+
+	require.NoError(t, sqliteRepository.DeleteMenu(4))
 
 }
 
-func testDBInit() *sql.DB {
-	db, err := sql.Open("sqlite3", ":memory:")
-	if err != nil {
-		log.Fatal(err)
+func createTables(db *sql.DB) error {
+	stmts := []string{
+		`CREATE TABLE IF NOT EXISTS menu (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		menu_type VARCHAR NOT NULL UNIQUE
+		);`,
+		`CREATE TABLE IF NOT EXISTS category_dish (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		menu_type_id INTEGER NOT NULL,
+		category_name VARCHAR UNIQUE NOT NULL,
+		FOREIGN KEY (menu_type_id) REFERENCES menu(id)
+		);`,
+		`CREATE TABLE IF NOT EXISTS dishes (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		dish_name VARCHAR UNIQUE NOT NULL,
+		category_dish_id INTEGER NOT NULL,
+		composition_of_the_dish VARCHAR NOT NULL,
+		dish_description VARCHAR,
+		price NUMERIC(4, 2) NOT NULL,
+		dish_weight INTEGER NOT NULL,
+		dish_image BLOB,
+		tags VARCHAR ARRAY,
+		FOREIGN KEY (category_dish_id) REFERENCES category_dish(id)
+		);`,
+		`CREATE TABLE IF NOT EXISTS events (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		event_name VARCHAR NOT NULL,
+		event_description VARCHAR,
+		event_date TIMESTAMP DEFAULT current_timestamp,
+		event_time TIMESTAMP DEFAULT current_timestamp
+		);`,
+		`CREATE TABLE IF NOT EXISTS admin_panel_users (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		user_login VARCHAR NOT NULL UNIQUE,
+		user_password VARCHAR NOT NULL,
+		email VARCHAR NOT NULL UNIQUE,
+		firstname VARCHAR NOT NULL,
+		lastname VARCHAR,
+		user_role VARCHAR NOT NULL DEFAULT 'менеджер',
+		create_date TIMESTAMP DEFAULT current_timestamp,
+		update_date TIMESTAMP DEFAULT current_timestamp,
+		CHECK (user_role IN ('менеджер', 'управляющий'))
+		);`,
 	}
 
-	stmt := `
-	CREATE TABLE IF NOT EXISTS menu (
-    	id INTEGER PRIMARY KEY AUTOINCREMENT,
-    	menu_type VARCHAR NOT NULL
-	);
-	`
-	_, err = db.Exec(stmt)
-	if err != nil {
-		log.Fatal(err)
+	for _, stmt := range stmts {
+		_, err := db.Exec(stmt)
+		if err != nil {
+			return err
+		}
 	}
 
-	return db
+	return nil
 }

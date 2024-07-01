@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS menu;
-DROP TABLE IF EXISTS category;
+DROP TABLE IF EXISTS category_dish;
 DROP TABLE IF EXISTS dishes;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS admin_panel_users;

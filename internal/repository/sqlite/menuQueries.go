@@ -12,10 +12,10 @@ func (r *SQLiteRepository) CreateMenu(menuType string) error {
 	return nil
 }
 
-func (r *SQLiteRepository) UpdateMenu(editedMenuType, menuType string) error {
-	stmt := `UPDATE menu SET menu_type = ? WHERE menu_type = ?`
+func (r *SQLiteRepository) UpdateMenu(menuTypeID int, editedMenuType string) error {
+	stmt := `UPDATE menu SET menu_type = ? WHERE id = ?`
 
-	_, err := r.db.Exec(stmt, editedMenuType, menuType)
+	_, err := r.db.Exec(stmt, editedMenuType, menuTypeID)
 	if err != nil {
 		r.log.Error(err.Error())
 		return err
@@ -24,10 +24,10 @@ func (r *SQLiteRepository) UpdateMenu(editedMenuType, menuType string) error {
 	return nil
 }
 
-func (r *SQLiteRepository) DeleteMenu(menuType string) error {
-	stmt := `DELETE FROM menu WHERE menu_type = ?`
+func (r *SQLiteRepository) DeleteMenu(menuTypeID int) error {
+	stmt := `DELETE FROM menu WHERE id = ?`
 
-	_, err := r.db.Exec(stmt, menuType)
+	_, err := r.db.Exec(stmt, menuTypeID)
 	if err != nil {
 		r.log.Error(err.Error())
 		return err
@@ -46,4 +46,23 @@ func (r *SQLiteRepository) isMenuTypeExist(menuType string) bool {
 	}
 
 	return true
+}
+
+func (r *SQLiteRepository) GetMenuType(menuTypeID int) (string, error) {
+	stmt := `SELECT menu_type FROM menu WHERE id = ?`
+
+	row := r.db.QueryRow(stmt, menuTypeID)
+	if err := row.Err(); err != nil {
+		r.log.Error(err.Error())
+		return "", err
+	}
+
+	var menuType string
+
+	if err := row.Scan(&menuType); err != nil {
+		r.log.Error(err.Error())
+		return "", err
+	}
+
+	return menuType, nil
 }

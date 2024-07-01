@@ -2,8 +2,8 @@ package site
 
 type RepositoryMenu interface {
 	CreateMenu(string) error
-	UpdateMenu(string, string) error
-	DeleteMenu(string) error
+	UpdateMenu(int, string) error
+	DeleteMenu(int) error
 }
 
 type RepositoryCategory interface {
