@@ -33,7 +33,7 @@ func startTestHTTPServer() *site.MainHandlers {
 	newLogger := logger.NewLogger(cfg.LogLevel)
 
 	siteHandlers := site.NewMainHandlers(newLogger)
-	adminHandlers := admin.NewAdminHandlers(newLogger)
+	adminHandlers := admin.NewAdminHandlers(newLogger, nil)
 
 	middlewares := middleware.NewMiddleware(newLogger)
 
@@ -64,7 +64,7 @@ func TestMain(t *testing.T) {
 
 	newLogger := logger.NewLogger(cfg.LogLevel)
 	siteHandlers := site.NewMainHandlers(newLogger)
-	adminHandlers := admin.NewAdminHandlers(newLogger)
+	adminHandlers := admin.NewAdminHandlers(newLogger, nil)
 	routes.SetUpRoutes(r, siteHandlers, adminHandlers, middleware.NewMiddleware(newLogger))
 	routes.SetUpFileServer(r, cfg.StaticDir)
 

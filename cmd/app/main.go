@@ -38,10 +38,10 @@ func main() {
 
 	newLogger := logger.NewLogger(cfg.LogLevel)
 
-	_ = sqlite.NewSQLiteRepository(newLogger, db)
+	sqliteRepository := sqlite.NewSQLiteRepository(newLogger, db)
 
 	siteHandlers := site.NewMainHandlers(newLogger)
-	adminHandlers := admin.NewAdminHandlers(newLogger)
+	adminHandlers := admin.NewAdminHandlers(newLogger, sqliteRepository)
 
 	middlewares := middleware.NewMiddleware(newLogger)
 

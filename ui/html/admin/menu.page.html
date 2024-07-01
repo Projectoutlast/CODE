@@ -1,29 +1,30 @@
 {{template "base" .}}
 
-{{define "title"}}Типы меню{{end}}
+{{define "title"}}{{.PageTitle}}{{end}}
 
 {{define "main"}}
 <h2>Menu</h2>
-<button onclick="window.location.href='menu_type_create.html'">Add Menu Type</button>
+<button href="/admin/menu/create" method="GET">Добавить новый тип меню</button>
 <table>
     <thead>
         <tr>
             <th>ID</th>
-            <th>Type</th>
-            <th>Actions</th>
+            <th>Наименование типа меню</th>
+            <th>действия</th>
         </tr>
     </thead>
     <tbody>
-        <!-- Example Menu Type Row -->
+        {{range .MenuTypes}}
         <tr>
-            <td>1</td>
-            <td>Appetizers</td>
+            <td>{{.ID}}</td>
+            <td>{{.Type}}</td>
             <td>
-                <button onclick="window.location.href='menu_type_view.html?id=1'">View</button>
-                <button onclick="window.location.href='menu_type_edit.html?id=1'">Edit</button>
-                <button onclick="window.location.href='menu_type_delete.html?id=1'">Delete</button>
+                <button onclick="window.location.href='menu_type_view.html?id=1'">Просмотр</button>
+                <button onclick="window.location.href='menu_type_edit.html?id=1'">Редактирование</button>
+                <button onclick="window.location.href='menu_type_delete.html?id=1'">Удаление</button>
             </td>
         </tr>
+        {{end}}
     </tbody>
 </table>
 {{end}}

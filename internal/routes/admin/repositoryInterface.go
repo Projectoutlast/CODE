@@ -1,7 +1,12 @@
-package site
+package admin
+
+import (
+	"code/internal/repository/models"
+)
 
 type RepositoryMenu interface {
 	CreateMenu(string) error
+	GetAllMenuTypes() (*[]models.Menu, error)
 	UpdateMenu(int, string) error
 	DeleteMenu(int) error
 }

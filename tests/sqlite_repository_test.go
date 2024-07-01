@@ -44,6 +44,9 @@ func TestMenu(t *testing.T) {
 
 	require.NoError(t, sqliteRepository.DeleteMenu(4))
 
+	menuTypes, err := sqliteRepository.GetAllMenuTypes()
+	require.NotEqual(t, len(*menuTypes), 0)
+
 }
 
 func createTables(db *sql.DB) error {

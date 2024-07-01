@@ -6,7 +6,6 @@ const baseHTMLLayout string = "./ui/html/site/base.layout.html"
 
 type MainHandlers struct {
 	log *slog.Logger
-	menu RepositoryMenu
 }
 
 func NewMainHandlers(log *slog.Logger) *MainHandlers {

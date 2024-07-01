@@ -35,10 +35,11 @@ func SetUpRoutes(
 	r.HandleFunc("/admin/employee/edit/{id}", middleware.Logging(adminHandlers.EditEmployee)).Methods("GET", "POST")
 	r.HandleFunc("/admin/employee/delete/{id}", middleware.Logging(adminHandlers.DeleteEmployee)).Methods("DELETE")
 
+	r.HandleFunc("/admin/menu/create", middleware.Logging(adminHandlers.CreateMenuGet)).Methods("GET")
+	r.HandleFunc("/admin/menu/create", middleware.Logging(adminHandlers.CreateMenuPost)).Methods("POST")
 	r.HandleFunc("/admin/menu", middleware.Logging(adminHandlers.Menu)).Methods("GET")
 	r.HandleFunc("/admin/menu/{type_id}", middleware.Logging(adminHandlers.TheMenuType)).Methods("GET")
 	r.HandleFunc("/admin/menu/edit/{type_id}", middleware.Logging(adminHandlers.EditMenu)).Methods("GET", "POST")
-	r.HandleFunc("/admin/menu/create", middleware.Logging(adminHandlers.CreateMenu)).Methods("GET", "POST")
 	r.HandleFunc("/admin/menu/delete/{type_id}", middleware.Logging(adminHandlers.DeleteMenu)).Methods("DELETE")
 
 	r.HandleFunc("/admin/menu/category", middleware.Logging(adminHandlers.Categories)).Methods("GET")
