@@ -6,6 +6,7 @@ import (
 
 type RepositoryMenu interface {
 	CreateMenu(string) error
+	GetMenuType(int) (*models.Menu, error)
 	GetAllMenuTypes() (*[]models.Menu, error)
 	UpdateMenu(int, string) error
 	DeleteMenu(int) error

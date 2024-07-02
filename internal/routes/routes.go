@@ -29,17 +29,12 @@ func SetUpRoutes(
 	// Admin routes
 	r.HandleFunc("/admin/main", middleware.Logging(adminHandlers.Index)).Methods("GET")
 
-	r.HandleFunc("/admin/employees", middleware.Logging(adminHandlers.Employees)).Methods("GET")
-	r.HandleFunc("/admin/register-new-employee", middleware.Logging(adminHandlers.RegisterNewEmployee)).Methods("GET", "POST")
-	r.HandleFunc("/admin/employee/{id}", middleware.Logging(adminHandlers.TheEmployee)).Methods("GET")
-	r.HandleFunc("/admin/employee/edit/{id}", middleware.Logging(adminHandlers.EditEmployee)).Methods("GET", "POST")
-	r.HandleFunc("/admin/employee/delete/{id}", middleware.Logging(adminHandlers.DeleteEmployee)).Methods("DELETE")
-
+	r.HandleFunc("/admin/menu", middleware.Logging(adminHandlers.Menu)).Methods("GET")
 	r.HandleFunc("/admin/menu/create", middleware.Logging(adminHandlers.CreateMenuGet)).Methods("GET")
 	r.HandleFunc("/admin/menu/create", middleware.Logging(adminHandlers.CreateMenuPost)).Methods("POST")
-	r.HandleFunc("/admin/menu", middleware.Logging(adminHandlers.Menu)).Methods("GET")
 	r.HandleFunc("/admin/menu/{type_id}", middleware.Logging(adminHandlers.TheMenuType)).Methods("GET")
-	r.HandleFunc("/admin/menu/edit/{type_id}", middleware.Logging(adminHandlers.EditMenu)).Methods("GET", "POST")
+	r.HandleFunc("/admin/menu/edit/{type_id}", middleware.Logging(adminHandlers.EditMenuGet)).Methods("GET")
+	r.HandleFunc("/admin/menu/edit/{type_id}", middleware.Logging(adminHandlers.EditMenuPost)).Methods("POST")
 	r.HandleFunc("/admin/menu/delete/{type_id}", middleware.Logging(adminHandlers.DeleteMenu)).Methods("DELETE")
 
 	r.HandleFunc("/admin/menu/category", middleware.Logging(adminHandlers.Categories)).Methods("GET")
@@ -59,6 +54,12 @@ func SetUpRoutes(
 	r.HandleFunc("/admin/event/edit/{event_id}", middleware.Logging(adminHandlers.EditEvent)).Methods("GET", "POST")
 	r.HandleFunc("/admin/event/create", middleware.Logging(adminHandlers.CreateEvent)).Methods("GET", "POST")
 	r.HandleFunc("/admin/event/delete/{event_id}", middleware.Logging(adminHandlers.DeleteEvent)).Methods("DELETE")
+
+	r.HandleFunc("/admin/employees", middleware.Logging(adminHandlers.Employees)).Methods("GET")
+	r.HandleFunc("/admin/register-new-employee", middleware.Logging(adminHandlers.RegisterNewEmployee)).Methods("GET", "POST")
+	r.HandleFunc("/admin/employee/{id}", middleware.Logging(adminHandlers.TheEmployee)).Methods("GET")
+	r.HandleFunc("/admin/employee/edit/{id}", middleware.Logging(adminHandlers.EditEmployee)).Methods("GET", "POST")
+	r.HandleFunc("/admin/employee/delete/{id}", middleware.Logging(adminHandlers.DeleteEmployee)).Methods("DELETE")
 }
 
 func SetUpFileServer(r *mux.Router, pathToStatic string) {

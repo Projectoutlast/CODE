@@ -1,10 +1,10 @@
 {{template "base" .}}
 
-{{define "title"}}{{.PageTitle}}{{end}}
+{{define "title"}}Типы меню{{end}}
 
 {{define "main"}}
 <h2>Menu</h2>
-<button href="/admin/menu/create" method="GET">Добавить новый тип меню</button>
+<button onclick="window.location.href='/admin/menu/create'" method="GET">Добавить новый тип меню</button>
 <table>
     <thead>
         <tr>
@@ -20,11 +20,30 @@
             <td>{{.Type}}</td>
             <td>
                 <button onclick="window.location.href='menu_type_view.html?id=1'">Просмотр</button>
-                <button onclick="window.location.href='menu_type_edit.html?id=1'">Редактирование</button>
-                <button onclick="window.location.href='menu_type_delete.html?id=1'">Удаление</button>
+                <button onclick="window.location.href='/admin/menu/edit/{{.ID}}'" method="GET">Редактирование</button>
+                <button onclick="deleteItem('{{.ID}}')">Удаление</button>
             </td>
         </tr>
         {{end}}
     </tbody>
 </table>
 {{end}}
+
+<script>
+    function deleteItem(id) {
+        if (confirm("Вы уверены, что хотите удалить этот элемент?")) {
+            fetch(`/admin/menu/delete/${id}`, {
+                method: 'DELETE'
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Failed to delete the item.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+    }
+</script>

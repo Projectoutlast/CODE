@@ -76,21 +76,20 @@ func (r *SQLiteRepository) isMenuTypeExist(menuType string) bool {
 	return true
 }
 
-func (r *SQLiteRepository) GetMenuType(menuTypeID int) (string, error) {
-	stmt := `SELECT menu_type FROM menu WHERE id = ?`
+func (r *SQLiteRepository) GetMenuType(menuTypeID int) (*models.Menu, error) {
+	stmt := `SELECT id, menu_type FROM menu WHERE id = ?`
 
 	row := r.db.QueryRow(stmt, menuTypeID)
 	if err := row.Err(); err != nil {
 		r.log.Error(err.Error())
-		return "", err
+		return nil, err
 	}
 
-	var menuType string
-
-	if err := row.Scan(&menuType); err != nil {
+	var menuType models.Menu
+	if err := row.Scan(&menuType.ID, &menuType.Type); err != nil {
 		r.log.Error(err.Error())
-		return "", err
+		return nil, err
 	}
 
-	return menuType, nil
+	return &menuType, nil
 }

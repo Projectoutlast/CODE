@@ -3,10 +3,10 @@
 {{define "title"}}Редактирование типа меню{{end}}
 
 {{define "main"}}
-<h2>Edit Menu Type</h2>
-<form action="#" method="POST">
-    <label for="type">Type:</label>
-    <input type="text" id="type" name="type" value="Appetizers" required>
-    <input type="submit" value="Save Changes">
+<h2>Редактирование типа меню</h2>
+<form action="/admin/menu/edit/{{.ID}}" method="POST">
+    <label for="type">Отредактируйте название типа меню</label>
+    <input type="text" id="type" name="type" value="{{.Type}}" required>
+    <input type="submit" value="Create">
 </form>
 {{end}}
