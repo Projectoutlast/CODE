@@ -32,15 +32,14 @@ func SetUpRoutes(
 	r.HandleFunc("/admin/menu", middleware.Logging(adminHandlers.Menu)).Methods("GET")
 	r.HandleFunc("/admin/menu/create", middleware.Logging(adminHandlers.CreateMenuGet)).Methods("GET")
 	r.HandleFunc("/admin/menu/create", middleware.Logging(adminHandlers.CreateMenuPost)).Methods("POST")
-	r.HandleFunc("/admin/menu/{type_id}", middleware.Logging(adminHandlers.TheMenuType)).Methods("GET")
 	r.HandleFunc("/admin/menu/edit/{type_id}", middleware.Logging(adminHandlers.EditMenuGet)).Methods("GET")
 	r.HandleFunc("/admin/menu/edit/{type_id}", middleware.Logging(adminHandlers.EditMenuPost)).Methods("POST")
 	r.HandleFunc("/admin/menu/delete/{type_id}", middleware.Logging(adminHandlers.DeleteMenu)).Methods("DELETE")
 
 	r.HandleFunc("/admin/menu/category", middleware.Logging(adminHandlers.Categories)).Methods("GET")
 	r.HandleFunc("/admin/menu/category/{id}", middleware.Logging(adminHandlers.TheCategory)).Methods("GET")
+	r.HandleFunc("/admin/menu/category/create", middleware.Logging(adminHandlers.CreateCategoryGet)).Methods("GET")
 	r.HandleFunc("/admin/menu/category/edit/{category_id}", middleware.Logging(adminHandlers.EditCategory)).Methods("GET", "POST")
-	r.HandleFunc("/admin/menu/category/create", middleware.Logging(adminHandlers.CreateCategory)).Methods("GET", "POST")
 	r.HandleFunc("/admin/menu/category/delete/{category_id}", middleware.Logging(adminHandlers.DeleteCategory)).Methods("DELETE")
 
 	r.HandleFunc("/admin/dishes", middleware.Logging(adminHandlers.Dishes)).Methods("GET")

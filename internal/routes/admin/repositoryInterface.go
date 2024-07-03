@@ -13,7 +13,5 @@ type RepositoryMenu interface {
 }
 
 type RepositoryCategory interface {
-	CreateCategory(string, string) error
-	UpdateCategory(string, string) error
-	DeleteCategory(string) error
+	GetAllCategories() ([]models.Category, error)
 }

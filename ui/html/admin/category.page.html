@@ -4,26 +4,30 @@
 
 {{define "main"}}
 <h2>Menu Categories</h2>
-<button onclick="window.location.href='menu_category_create.html'">Add Category</button>
+<button onclick="window.location.href='/admin/menu/category/create'" method="GET">Добавить категорию</button>
 <table>
     <thead>
         <tr>
             <th>ID</th>
-            <th>Category</th>
-            <th>Actions</th>
+            <th>Категория</th>
+            <th>Действия</th>
         </tr>
     </thead>
     <tbody>
-        <!-- Example Category Row -->
+        {{if .}}
+        {{range .Categories}}
         <tr>
-            <td>1</td>
-            <td>Starters</td>
+            <td>{{.ID}}</td>
+            <td>{{.CategoryName}}</td>
             <td>
-                <button onclick="window.location.href='menu_category_view.html?id=1'">View</button>
-                <button onclick="window.location.href='menu_category_edit.html?id=1'">Edit</button>
-                <button onclick="window.location.href='menu_category_delete.html?id=1'">Delete</button>
+                <button onclick="window.location.href='menu_category_view.html?id=1'">Просмотр</button>
+                <button onclick="window.location.href='menu_category_edit.html?id=1'">Редактирование</button>
+                <button onclick="window.location.href='menu_category_delete.html?id=1'">Удаление</button>
             </td>
         </tr>
+        {{end}}
+        {{else}}
+        {{end}}
     </tbody>
 </table>
 {{end}}

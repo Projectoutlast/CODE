@@ -1,45 +1,30 @@
 package sqlite
 
 import (
-	"code/internal/repository/errors"
+	"code/internal/repository/models"
 )
 
-func (r *SQLiteRepository) CreateCategory(menuType, categoryName string) error {
-	if !r.isMenuTypeExist(menuType) {
-		return errors.ErrNoMenuType
-	}
+func (r *SQLiteRepository) GetAllCategories() ([]models.Category, error) {
+	stmt := `SELECT id, menu_type_id, category_name FROM category_dish`
 
-	stmt := `INSERT INTO category (menu_type, category_dish) VALUES (?, ?)`
-
-	_, err := r.db.Exec(stmt, menuType, categoryName)
+	rows, err := r.db.Query(stmt)
 	if err != nil {
 		r.log.Error(err.Error())
-		return err
+		return nil, err
+	}
+	defer rows.Close()
+
+	var categories []models.Category
+
+	for rows.Next() {
+		var category models.Category
+		if err := rows.Scan(&category.ID, &category.MenuTypeID, &category.CategoryName); err != nil {
+			r.log.Error(err.Error())
+			return nil, err
+		}
+
+		categories = append(categories, category)
 	}
 
-	return nil
-}
-
-func (r *SQLiteRepository) UpdateCategory(editedCategoryName, categoryName string) error {
-	stmt := `UPDATE category SET category_dish = ? WHERE category_dish = ?`
-
-	_, err := r.db.Exec(stmt, editedCategoryName, categoryName)
-	if err != nil {
-		r.log.Error(err.Error())
-		return err
-	}
-
-	return nil
-}
-
-func (r *SQLiteRepository) DeleteCategory(categoryName string) error {
-	stmt := `DELETE FROM category WHERE category_dish = ?`
-
-	_, err := r.db.Exec(stmt, categoryName)
-	if err != nil {
-		r.log.Error(err.Error())
-		return err
-	}
-
-	return nil
+	return categories, nil
 }
