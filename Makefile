@@ -7,4 +7,4 @@ run-migrate-down:
 test-coverage:
 	go test -coverpkg=./internal/... -coverprofile=coverage.out ./tests && go tool cover -html=coverage.out
 test:
-	go test -coverpkg=./internal/... ./tests
+	go test -coverpkg=./internal/... -coverprofile=./coverage.out ./tests && go tool cover -func=./coverage.out

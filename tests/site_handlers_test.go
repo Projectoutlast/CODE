@@ -4,14 +4,19 @@ import (
 	"code/internal/config"
 	"code/internal/logger"
 	"code/internal/middleware"
+	"code/internal/repository/sqlite"
 	"code/internal/routes"
 	"code/internal/routes/admin"
 	"code/internal/routes/site"
+	"database/sql"
+	"fmt"
 	"log"
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/gorilla/mux"
@@ -19,8 +24,38 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func startTestHTTPServer() *site.MainHandlers {
-	err := os.Chdir("..")
+func TestAdminHandlers(t *testing.T) {
+
+	_, adminHandlers := startTestHTTPServer(t)
+
+	rw, req := createRWReq(http.MethodGet, "/admin/menu")
+	adminHandlers.Index(rw, req)
+	require.Equal(t, http.StatusOK, rw.Code)
+	strings.Contains(rw.Body.String(), "Наименование типа меню")
+
+	rw, req = createRWReq(http.MethodGet, "/admin/menu/create")
+	adminHandlers.CreateMenuGet(rw, req)
+	require.Equal(t, http.StatusOK, rw.Code)
+	strings.Contains(rw.Body.String(), "Введите название")
+
+	rw, req = createRWReq(http.MethodPost, "/admin/menu/create")
+	req.Form = url.Values{}
+	req.Form.Set("type", "Основное")
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	adminHandlers.CreateMenuPost(rw, req)
+	require.Equal(t, http.StatusSeeOther, rw.Code)
+
+}
+
+func createRWReq(method, route string) (*httptest.ResponseRecorder, *http.Request) {
+	rw := httptest.NewRecorder()
+	req := httptest.NewRequest(method, route, nil)
+	return rw, req
+}
+
+func startTestHTTPServer(t *testing.T) (*site.MainHandlers, *admin.AdminHandlers) {
+	os.Chdir("..")
+	fmt.Println(os.Getwd())
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
 	}
@@ -32,8 +67,19 @@ func startTestHTTPServer() *site.MainHandlers {
 
 	newLogger := logger.NewLogger(cfg.LogLevel)
 
+	dsn := fmt.Sprintf("file:%s?mode=memory&cache=shared", t.Name())
+	db, err := sql.Open("sqlite3", dsn)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	require.NoError(t, createTables(db))
+
+	sqliteRepository := sqlite.NewSQLiteRepository(newLogger, db)
+
 	siteHandlers := site.NewMainHandlers(newLogger)
-	adminHandlers := admin.NewAdminHandlers(newLogger, nil)
+
+	adminHandlers := admin.NewAdminHandlers(sqliteRepository, newLogger, sqliteRepository)
 
 	middlewares := middleware.NewMiddleware(newLogger)
 
@@ -43,36 +89,7 @@ func startTestHTTPServer() *site.MainHandlers {
 	routes.SetUpFileServer(r, cfg.StaticDir)
 
 	newLogger.Info("Starting server on", slog.String("port", cfg.Port))
-	err = http.ListenAndServe(cfg.Port, r)
-	log.Fatal(err)
+	go http.ListenAndServe(cfg.Port, r)
 
-	return siteHandlers
-}
-
-func TestMain(t *testing.T) {
-	err := os.Chdir("..")
-	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
-	cfg, err := config.NewConfig()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	r := mux.NewRouter()
-
-	newLogger := logger.NewLogger(cfg.LogLevel)
-	siteHandlers := site.NewMainHandlers(newLogger)
-	adminHandlers := admin.NewAdminHandlers(newLogger, nil)
-	routes.SetUpRoutes(r, siteHandlers, adminHandlers, middleware.NewMiddleware(newLogger))
-	routes.SetUpFileServer(r, cfg.StaticDir)
-
-	rw := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/", nil)
-
-	siteHandlers.Index(rw, req)
-
-	require.Equal(t, http.StatusOK, rw.Code)
-
+	return siteHandlers, adminHandlers
 }

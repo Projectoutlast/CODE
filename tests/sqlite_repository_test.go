@@ -4,6 +4,7 @@ import (
 	"code/internal/logger"
 	"code/internal/repository/sqlite"
 	"database/sql"
+	"fmt"
 	"testing"
 
 	"code/tests/suits"
@@ -13,12 +14,16 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func TestMenu(t *testing.T) {
+func TestCreateAppMenu(t *testing.T) {
 	t.Parallel()
+
+	_ = logger.NewLogger("test")
+	_ = logger.NewLogger("prod")
 
 	logger := logger.NewLogger("dev")
 
-	db, err := sql.Open("sqlite3", ":memory:")
+	dsn := fmt.Sprintf("file:%s?mode=memory&cache=shared", t.Name())
+	db, err := sql.Open("sqlite3", dsn)
 
 	require.NoError(t, err)
 
