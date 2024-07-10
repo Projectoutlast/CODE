@@ -5,8 +5,15 @@
 {{define "main"}}
 <h2>Create New Category</h2>
 <form action="#" method="POST">
-    <label for="category">Category:</label>
+    <label for="category">Введите название новой категории:</label>
     <input type="text" id="category" name="category" required>
+    <label for="category">Выберите тип меню, к которому относится новая категория:</label>
+    <select id="menuType" name="menuType" required>
+        {{range .}}
+        <option value="{{.ID}}">{{.Type}}</option>
+        {{end}}
+        <option value="all">Все</option>
+    </select>
     <input type="submit" value="Create">
 </form>
 {{end}}
