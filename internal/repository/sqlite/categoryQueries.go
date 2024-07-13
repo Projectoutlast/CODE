@@ -28,3 +28,16 @@ func (r *SQLiteRepository) GetAllCategories() ([]models.Category, error) {
 
 	return categories, nil
 }
+
+func (r *SQLiteRepository) CreateCategory(menuTypeID, category string) error {
+	stmt := `INSERT INTO category_dish (menu_type_id, category_name) VALUES (?, ?)`
+
+	_, err := r.db.Exec(stmt, menuTypeID, category)
+
+	if err != nil {
+		r.log.Error(err.Error())
+		return err
+	}
+
+	return nil
+}

@@ -58,6 +58,24 @@ func (h *AdminHandlers) CreateCategory(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (h *AdminHandlers) CreateCategoryProcess(w http.ResponseWriter, r *http.Request) {
+	menuTypeID := r.FormValue("menuType")
+	category := r.FormValue("category")
+
+	if menuTypeID == "" || category == "" {
+		h.log.Warn("empty category or menu type")
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := h.category.CreateCategory(menuTypeID, category); err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/admin/menu/category", http.StatusSeeOther)
+}
+
 func (h *AdminHandlers) TheCategory(w http.ResponseWriter, r *http.Request) {
 	files := []string{
 		"./ui/html/admin/category_view.page.html",

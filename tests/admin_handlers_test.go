@@ -104,10 +104,15 @@ func TestMenu(t *testing.T) {
 	require.Equal(t, http.StatusSeeOther, rw.Code)
 
 	// CATEGORIES
+	rw, req = createRWReq(http.MethodPost, "/admin/menu/category/create")
+	req.Form = url.Values{}
+	req.Form.Set("menuType", "1")
+	req.Form.Set("category", "Салаты")
+
 	rw, req = createRWReq(http.MethodGet, "/admin/menu/category")
 	adminHandlers.Categories(rw, req)
 	require.Equal(t, http.StatusOK, rw.Code)
-	strings.Contains(rw.Body.String(), "Добавить категорию")
+	strings.Contains(rw.Body.String(), "Салаты")
 
 	rw, req = createRWReq(http.MethodGet, "/admin/menu/category/create")
 	adminHandlers.CreateCategory(rw, req)
