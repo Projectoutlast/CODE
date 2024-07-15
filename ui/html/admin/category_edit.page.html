@@ -1,12 +1,12 @@
 {{template "base" .}}
 
-{{define "title"}}Редактирование категории меню{{end}}
+{{define "title"}}Редактирование категории{{end}}
 
 {{define "main"}}
-<h2>Edit Category</h2>
-<form action="#" method="POST">
-    <label for="category">Category:</label>
-    <input type="text" id="category" name="category" value="Starters" required>
-    <input type="submit" value="Save Changes">
+<h2>Редактирование категории</h2>
+<form action="/admin/menu/category/edit/{{.ID}}" method="POST">
+    <label for="type">Отредактируйте наименование категории</label>
+    <input type="text" id="category" name="category" value="{{.CategoryName}}" required>
+    <input type="submit" value="Отредактировать">
 </form>
 {{end}}

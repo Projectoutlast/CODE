@@ -108,6 +108,9 @@ func TestMenu(t *testing.T) {
 	req.Form = url.Values{}
 	req.Form.Set("menuType", "1")
 	req.Form.Set("category", "Салаты")
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	adminHandlers.CreateCategoryProcess(rw, req)
+	require.Equal(t, http.StatusSeeOther, rw.Code)
 
 	rw, req = createRWReq(http.MethodGet, "/admin/menu/category")
 	adminHandlers.Categories(rw, req)
@@ -118,6 +121,20 @@ func TestMenu(t *testing.T) {
 	adminHandlers.CreateCategory(rw, req)
 	require.Equal(t, http.StatusOK, rw.Code)
 	strings.Contains(rw.Body.String(), "Выберите тип меню, к которому относится новая категория:")
+
+	rw, req = createRWReq(http.MethodGet, "/admin/menu/category/edit/1")
+	req = mux.SetURLVars(req, map[string]string{"category_id": "1"})
+	adminHandlers.EditCategory(rw, req)
+	require.Equal(t, http.StatusOK, rw.Code)
+	strings.Contains(rw.Body.String(), "Редактирование категории")
+
+	rw, req = createRWReq(http.MethodPost, "/admin/menu/category/edit/1")
+	req.Form = url.Values{}
+	req.Form.Set("category", "Измененная категория")
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req = mux.SetURLVars(req, map[string]string{"category_id": "1"})
+	adminHandlers.EditCategoryProcess(rw, req)
+	require.Equal(t, http.StatusSeeOther, rw.Code)
 
 }
 

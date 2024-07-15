@@ -15,13 +15,13 @@
     </thead>
     <tbody>
         {{if .}}
-        {{range .Categories}}
+        {{range .}}
         <tr>
             <td>{{.ID}}</td>
             <td>{{.CategoryName}}</td>
             <td>
-                <button onclick="window.location.href='menu_category_view.html?id=1'">Просмотр</button>
-                <button onclick="window.location.href='menu_category_edit.html?id=1'">Редактирование</button>
+                <button>Просмотр</button>
+                <button onclick="window.location.href='/admin/menu/category/edit/{{.ID}}'">Редактирование</button>
                 <button onclick="window.location.href='menu_category_delete.html?id=1'">Удаление</button>
             </td>
         </tr>

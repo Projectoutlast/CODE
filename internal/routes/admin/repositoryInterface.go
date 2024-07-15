@@ -15,4 +15,6 @@ type RepositoryMenu interface {
 type RepositoryCategory interface {
 	GetAllCategories() ([]models.Category, error)
 	CreateCategory(string, string) error
+	GetCategory(int) (*models.Category, error)
+	UpdateCategory(int, string) error
 }

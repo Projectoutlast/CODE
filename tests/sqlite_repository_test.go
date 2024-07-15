@@ -44,13 +44,23 @@ func TestCreateAppMenu(t *testing.T) {
 
 	menuType, err := sqliteRepository.GetMenuType(4)
 	require.NoError(t, err)
-
 	require.NotEqual(t, menuType, suits.MenuTypes[3].MenuType)
-
 	require.NoError(t, sqliteRepository.DeleteMenu(4))
 
 	menuTypes, err := sqliteRepository.GetAllMenuTypes()
 	require.NotEqual(t, len(*menuTypes), 0)
+
+	newCategory := "Бургеры"
+	err = sqliteRepository.CreateCategory("1", newCategory)
+	require.NoError(t, err)
+
+	err = sqliteRepository.UpdateCategory(1, "Салаты")
+	require.NoError(t, err)
+
+	category, err := sqliteRepository.GetCategory(1)
+	require.NoError(t, err)
+	require.NotNil(t, category)
+	require.NotEqual(t, category.CategoryName, newCategory)
 
 }
 
