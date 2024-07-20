@@ -15,6 +15,8 @@ func NewLogger(logLevel string) *slog.Logger {
 		log = slog.New(slog.NewTextHandler(os.Stdin, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	case "prod":
 		log = slog.New(slog.NewJSONHandler(os.Stdin, &slog.HandlerOptions{Level: slog.LevelInfo}))
+	default:
+		log = slog.New(slog.NewTextHandler(os.Stdin, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	}
 
 	return log
