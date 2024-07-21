@@ -137,3 +137,20 @@ func (h *AdminHandlers) EditCategoryProcess(w http.ResponseWriter, r *http.Reque
 
 	http.Redirect(w, r, "/admin/menu/category", http.StatusSeeOther)
 }
+
+func (h *AdminHandlers) DeleteCategory(w http.ResponseWriter, r *http.Request) {
+	category_id, err := strconv.Atoi(mux.Vars(r)["category_id"])
+
+	if err != nil {
+		h.log.Error(fmt.Sprintf("can't parse category id: %s", err.Error()))
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	if err := h.category.DeleteCategory(category_id); err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/admin/menu/category", http.StatusSeeOther)
+}

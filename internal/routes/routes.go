@@ -41,6 +41,7 @@ func SetUpRoutes(
 	r.HandleFunc("/admin/menu/category/create", middleware.Logging(adminHandlers.CreateCategoryProcess)).Methods("POST")
 	r.HandleFunc("/admin/menu/category/edit/{category_id}", middleware.Logging(adminHandlers.EditCategory)).Methods("GET")
 	r.HandleFunc("/admin/menu/category/edit/{category_id}", middleware.Logging(adminHandlers.EditCategoryProcess)).Methods("POST")
+	r.HandleFunc("/admin/menu/category/delete/{category_id}", middleware.Logging(adminHandlers.DeleteCategory)).Methods("DELETE")
 }
 
 func SetUpFileServer(r *mux.Router, pathToStatic string) {

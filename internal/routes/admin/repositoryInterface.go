@@ -17,4 +17,5 @@ type RepositoryCategory interface {
 	CreateCategory(string, string) error
 	GetCategory(int) (*models.Category, error)
 	UpdateCategory(int, string) error
+	DeleteCategory(int) error
 }

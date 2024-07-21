@@ -84,7 +84,7 @@ func TestUpdateMenu(t *testing.T) {
 	mock.ExpectExec(`UPDATE menu SET menu_type = \? WHERE id = \?`).
 		WithArgs("Appetizer", 1).
 		WillReturnError(fmt.Errorf("no rows in result set"))
-	
+
 	err = repo.UpdateMenu(1, "Appetizer")
 	assert.Error(t, err)
 }
@@ -106,7 +106,7 @@ func TestDeleteMenu(t *testing.T) {
 	mock.ExpectExec("DELETE FROM menu WHERE id = ?").
 		WithArgs(1).
 		WillReturnError(fmt.Errorf("no rows in result set"))
-	
+
 	err = repo.DeleteMenu(1)
 	assert.Error(t, err)
 }
@@ -258,5 +258,27 @@ func TestUpdateCategory(t *testing.T) {
 		WillReturnError(fmt.Errorf("no rows in result set"))
 
 	err = repo.UpdateCategory(1, "Appetizers")
+	assert.Error(t, err)
+}
+
+func TestDeleteCategory(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
+
+	repo := NewSQLiteRepository(slog.Default(), db)
+
+	mock.ExpectExec("DELETE FROM category_dish WHERE id = ?").
+		WithArgs(1).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	
+	err = repo.DeleteCategory(1)
+	assert.NoError(t, err)
+
+	mock.ExpectExec("DELETE FROM category_dish WHERE id = ?").
+		WithArgs(1).
+		WillReturnError(fmt.Errorf("no rows in result set"))
+	
+	err = repo.DeleteCategory(1)
 	assert.Error(t, err)
 }

@@ -72,3 +72,15 @@ func (r *SQLiteRepository) UpdateCategory(categoryID int, categoryNewName string
 
 	return nil
 }
+
+func (r *SQLiteRepository) DeleteCategory(categoryID int) error {
+	stmt := `DELETE FROM category_dish WHERE id = ?`
+
+	_, err := r.db.Exec(stmt, categoryID)
+	if err != nil {
+		r.log.Error(err.Error())
+		return err
+	}
+
+	return nil
+}

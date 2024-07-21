@@ -22,7 +22,7 @@
             <td>
                 <button>Просмотр</button>
                 <button onclick="window.location.href='/admin/menu/category/edit/{{.ID}}'">Редактирование</button>
-                <button onclick="window.location.href='menu_category_delete.html?id=1'">Удаление</button>
+                <button onclick="deleteItem('{{.ID}}')">Удаление</button>
             </td>
         </tr>
         {{end}}
@@ -31,3 +31,22 @@
     </tbody>
 </table>
 {{end}}
+
+<script>
+    function deleteItem(id) {
+        if (confirm("Вы уверены, что хотите удалить этот элемент?")) {
+            fetch(`/admin/menu/category/delete/${id}`, {
+                method: 'DELETE'
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Failed to delete the item.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+    }
+</script>
