@@ -271,14 +271,48 @@ func TestDeleteCategory(t *testing.T) {
 	mock.ExpectExec("DELETE FROM category_dish WHERE id = ?").
 		WithArgs(1).
 		WillReturnResult(sqlmock.NewResult(1, 1))
-	
+
 	err = repo.DeleteCategory(1)
 	assert.NoError(t, err)
 
 	mock.ExpectExec("DELETE FROM category_dish WHERE id = ?").
 		WithArgs(1).
 		WillReturnError(fmt.Errorf("no rows in result set"))
-	
+
 	err = repo.DeleteCategory(1)
+	assert.Error(t, err)
+}
+
+func TestGetAllDishes(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
+
+	repo := NewSQLiteRepository(slog.Default(), db)
+
+	rows := mock.NewRows([]string{
+		"id",
+		"dish_name",
+		"category_dish_id",
+		"composition_of_the_dish",
+		"dish_description",
+		"price",
+		"dish_weight",
+		"dish_image",
+		"tags",
+	}).
+		AddRow(1, "Beef Burger", 1, "Beef, cheese, lettuce", "Beef with cheese and lettuce", 1000, 500, []byte{}, "Beef, Cheese, Lettuce").
+		AddRow(2, "Chicken Burger", 1, "Chicken, cheese, lettuce", "Chicken with cheese and lettuce", 1000, 500, []byte{}, "Chicken, Cheese, Lettuce")
+
+	mock.ExpectQuery(`SELECT \* FROM dishes`).WillReturnRows(rows)
+
+	dishes, err := repo.GetAllDishes()
+	assert.NoError(t, err)
+	assert.NotNil(t, dishes)
+	assert.Equal(t, 2, len(dishes))
+
+	mock.ExpectQuery(`SELECT \* FROM dishes`).WillReturnError(fmt.Errorf("no rows in result set"))
+
+	_, err = repo.GetAllDishes()
 	assert.Error(t, err)
 }

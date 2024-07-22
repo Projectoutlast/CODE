@@ -19,3 +19,7 @@ type RepositoryCategory interface {
 	UpdateCategory(int, string) error
 	DeleteCategory(int) error
 }
+
+type RepositoryDish interface {
+	GetAllDishes() ([]models.Dish, error)
+}
