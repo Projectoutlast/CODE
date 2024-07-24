@@ -1,0 +1,62 @@
+{{template "base" .}}
+
+{{define "title"}}Блюда{{end}}
+
+{{define "main"}}
+<h2>Menu Categories</h2>
+<button onclick="window.location.href='/admin/menu/dish/create'" method="GET">Добавить блюдо</button>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Наименование</th>
+            <th>Категория</th>
+            <th>Состав</th>
+            <th>Описание</th>
+            <th>Цена</th>
+            <th>Вес</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{if .}}
+        {{range .}}
+        <tr>
+            <td>{{.ID}}</td>
+            <td>{{.DishName}}</td>
+            <td>{{.CategoryDishID}}</td>
+            <td>{{.CompositionOnTheDish}}</td>
+            <td>{{.DishDescription}}</td>
+            <td>{{.Price}}</td>
+            <td>{{.DishWeight}}</td>
+            <td>
+                <button>Просмотр</button>
+                <button onclick="window.location.href='/admin/menu/category/edit/{{.ID}}'">Редактирование</button>
+                <button onclick="deleteItem('{{.ID}}')">Удаление</button>
+            </td>
+        </tr>
+        {{end}}
+        {{else}}
+        {{end}}
+    </tbody>
+</table>
+{{end}}
+
+<script>
+    function deleteItem(id) {
+        if (confirm("Вы уверены, что хотите удалить этот элемент?")) {
+            fetch(`/admin/menu/category/delete/${id}`, {
+                method: 'DELETE'
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Failed to delete the item.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+    }
+</script>
