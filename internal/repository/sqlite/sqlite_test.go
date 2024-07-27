@@ -1,6 +1,7 @@
 package sqlite
 
 import (
+	"code/internal/models"
 	"fmt"
 	"log/slog"
 	"testing"
@@ -293,6 +294,7 @@ func TestGetAllDishes(t *testing.T) {
 	rows := mock.NewRows([]string{
 		"id",
 		"dish_name",
+		"menu_type_id",
 		"category_dish_id",
 		"composition_of_the_dish",
 		"dish_description",
@@ -301,8 +303,8 @@ func TestGetAllDishes(t *testing.T) {
 		"dish_image",
 		"tags",
 	}).
-		AddRow(1, "Beef Burger", 1, "Beef, cheese, lettuce", "Beef with cheese and lettuce", 1000, 500, []byte{}, "Beef, Cheese, Lettuce").
-		AddRow(2, "Chicken Burger", 1, "Chicken, cheese, lettuce", "Chicken with cheese and lettuce", 1000, 500, []byte{}, "Chicken, Cheese, Lettuce")
+		AddRow(1, "Beef Burger", 1, 1, "Beef, cheese, lettuce", "Beef with cheese and lettuce", 1000, 500, []byte{}, "Beef, Cheese, Lettuce").
+		AddRow(2, "Chicken Burger", 1, 1, "Chicken, cheese, lettuce", "Chicken with cheese and lettuce", 1000, 500, []byte{}, "Chicken, Cheese, Lettuce")
 
 	mock.ExpectQuery(`SELECT \* FROM dishes`).WillReturnRows(rows)
 
@@ -314,5 +316,54 @@ func TestGetAllDishes(t *testing.T) {
 	mock.ExpectQuery(`SELECT \* FROM dishes`).WillReturnError(fmt.Errorf("no rows in result set"))
 
 	_, err = repo.GetAllDishes()
+	assert.Error(t, err)
+}
+
+func TestCreateDish(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
+
+	repo := NewSQLiteRepository(slog.Default(), db)
+
+	mock.ExpectExec(`INSERT INTO dishes \(
+	dish_name,
+	menu_type_id,
+	category_dish_id,
+	composition_of_the_dish,
+	dish_description,
+	price, 
+	dish_weight,
+	tags\) VALUES \(\?, \?, \?, \?, \?, \?, \?, \?\)`).
+	WithArgs("Beef Burger", 1, 1, "Beef, cheese, lettuce", "Beef with cheese and lettuce", 10.00, 500, "Beef, Cheese, Lettuce").
+	WillReturnResult(sqlmock.NewResult(1, 1))
+
+	newDish := &models.Dish{
+		Name: "Beef Burger",
+		CategoryDishID: 1,
+		MenuTypeID: 1,
+		Composition: "Beef, cheese, lettuce",
+		Description: "Beef with cheese and lettuce",
+		Price: 10.00,
+		Weight: 500,
+		Tags: "Beef, Cheese, Lettuce",
+	}
+	err = repo.CreateNewDish(newDish)
+
+	assert.NoError(t, err)
+
+	mock.ExpectExec(`INSERT INTO dishes \(
+		dish_name,
+		menu_type_id,
+		category_dish_id,
+		composition_of_the_dish,
+		dish_description,
+		price, 
+		dish_weight,
+		tags\) VALUES \(\?, \?, \?, \?, \?, \?, \?, \?\)`).
+		WithArgs().
+		WillReturnError(fmt.Errorf("some error occured"))
+
+	err = repo.CreateNewDish(&models.Dish{})
 	assert.Error(t, err)
 }

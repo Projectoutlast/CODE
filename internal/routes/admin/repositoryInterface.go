@@ -1,7 +1,7 @@
 package admin
 
 import (
-	"code/internal/repository/models"
+	"code/internal/models"
 )
 
 type RepositoryMenu interface {
@@ -22,4 +22,5 @@ type RepositoryCategory interface {
 
 type RepositoryDish interface {
 	GetAllDishes() ([]models.Dish, error)
+	CreateNewDish(*models.Dish) error
 }

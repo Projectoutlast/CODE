@@ -1,6 +1,6 @@
 package admin
 
-import "code/internal/repository/models"
+import "code/internal/models"
 
 type MenuResponse struct {
 	MenuTypes []models.Menu

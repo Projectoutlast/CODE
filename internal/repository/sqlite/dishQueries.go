@@ -1,7 +1,7 @@
 package sqlite
 
 import (
-	"code/internal/repository/models"
+	"code/internal/models"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -23,22 +23,54 @@ func (r *SQLiteRepository) GetAllDishes() ([]models.Dish, error) {
 		var tags string
 		if err := rows.Scan(
 			&dish.ID,
-			&dish.DishName,
+			&dish.Name,
+			&dish.MenuTypeID,
 			&dish.CategoryDishID,
-			&dish.CompositionOnTheDish,
-			&dish.DishDescription,
+			&dish.Composition,
+			&dish.Description,
 			&dish.Price,
-			&dish.DishWeight,
-			&dish.DishImage,
+			&dish.Weight,
+			&dish.Image,
 			&tags,
 		); err != nil {
 			r.log.Error(err.Error())
 			return nil, err
 		}
 
-		dish.Tags = []string{tags}
+		dish.Tags = tags
 		dishes = append(dishes, dish)
 	}
 
 	return dishes, nil
+}
+
+func (r *SQLiteRepository) CreateNewDish(dish *models.Dish) error {
+	stmt := `INSERT INTO dishes (
+	dish_name,
+	menu_type_id,
+	category_dish_id,
+	composition_of_the_dish,
+	dish_description,
+	price, 
+	dish_weight,
+	tags) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+
+	_, err := r.db.Exec(
+		stmt,
+		dish.Name,
+		dish.MenuTypeID,
+		dish.CategoryDishID,
+		dish.Composition,
+		dish.Description,
+		dish.Price,
+		dish.Weight,
+		dish.Tags,
+	)
+
+	if err != nil {
+		r.log.Error(err.Error())
+		return err
+	}
+
+	return err
 }

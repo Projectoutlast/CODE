@@ -23,15 +23,15 @@
         {{range .}}
         <tr>
             <td>{{.ID}}</td>
-            <td>{{.DishName}}</td>
+            <td>{{.Name}}</td>
             <td>{{.CategoryDishID}}</td>
-            <td>{{.CompositionOnTheDish}}</td>
-            <td>{{.DishDescription}}</td>
+            <td>{{.Composition}}</td>
+            <td>{{.Description}}</td>
             <td>{{.Price}}</td>
-            <td>{{.DishWeight}}</td>
+            <td>{{.Weight}}</td>
             <td>
                 <button>Просмотр</button>
-                <button onclick="window.location.href='/admin/menu/category/edit/{{.ID}}'">Редактирование</button>
+                <button onclick="window.location.href='/admin/menu/dish/edit/{{.ID}}'">Редактирование</button>
                 <button onclick="deleteItem('{{.ID}}')">Удаление</button>
             </td>
         </tr>

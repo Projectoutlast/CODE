@@ -4,7 +4,7 @@
 
 {{define "main"}}
 <h2>Create New Dish</h2>
-<form action="/admin/menu/category/create" method="POST">
+<form action="/admin/menu/dish/create" method="POST">
     <label for="menuType">Выберите тип меню, к которому относится новое блюдо:</label>
     <select id="menuType" name="menuType" required>
         {{range .MenuTypes}}

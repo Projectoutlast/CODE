@@ -1,7 +1,7 @@
 package sqlite
 
 import (
-	"code/internal/repository/models"
+	"code/internal/models"
 )
 
 func (r *SQLiteRepository) GetAllCategories() ([]models.Category, error) {
