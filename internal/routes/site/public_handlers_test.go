@@ -96,17 +96,6 @@ func TestUserAgreement(t *testing.T) {
 	defer resp.Body.Close()
 }
 
-func TestNewsAndEvents(t *testing.T) {
-	hadler := &MainHandlers{log: slog.Default()}
-
-	ts := httptest.NewServer(http.HandlerFunc(hadler.NewsAndEvents))
-	defer ts.Close()
-
-	resp, err := http.Get(ts.URL)
-	assert.NoError(t, err)
-	defer resp.Body.Close()
-}
-
 func TestAbout(t *testing.T) {
 	hadler := &MainHandlers{log: slog.Default()}
 

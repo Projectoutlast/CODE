@@ -22,7 +22,6 @@ func SetUpRoutes(
 	r.HandleFunc("/menu-for-catering", middleware.Logging(siteHandlers.MenuForCatering)).Methods("GET")
 	r.HandleFunc("/about", middleware.Logging(siteHandlers.About)).Methods("GET")
 	r.HandleFunc("/contacts", middleware.Logging(siteHandlers.Contacts)).Methods("GET")
-	r.HandleFunc("/news-and-events", middleware.Logging(siteHandlers.NewsAndEvents)).Methods("GET")
 	r.HandleFunc("/privacy-policy", middleware.Logging(siteHandlers.PrivacyPolicy)).Methods("GET")
 	r.HandleFunc("/user-agreement", middleware.Logging(siteHandlers.UserAgreement)).Methods("GET")
 
