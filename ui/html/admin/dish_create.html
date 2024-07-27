@@ -1,0 +1,40 @@
+{{template "base" .}}
+
+{{define "title"}}Создание нового блюда{{end}}
+
+{{define "main"}}
+<h2>Create New Dish</h2>
+<form action="/admin/menu/category/create" method="POST">
+    <label for="menuType">Выберите тип меню, к которому относится новое блюдо:</label>
+    <select id="menuType" name="menuType" required>
+        {{range .MenuTypes}}
+        <option value="{{.ID}}">{{.Type}}</option>
+        {{end}}
+    </select>
+    <label for="category">Выберите категорию, к которой относится новое блюдо:</label>
+    <select id="category" name="category" required>
+        {{range .Categories}}
+        <option value="{{.ID}}">{{.CategoryName}}</option>
+        {{end}}
+    </select>
+    <label for="name">Введите название нового блюда:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="composition">Введите состав:</label>
+    <input type="text" id="composition" name="composition" required>
+
+    <label for="description">Введите описание:</label>
+    <input type="text" id="description" name="description">
+
+    <label for="price">Введите стоимость:</label>
+    <input type="number" id="price" name="price" min="0" step="0.01" required>
+
+    <label for="weight">Укажите вес:</label>
+    <input type="number" id="weight" name="weight" min="0" step="1" required>
+
+    <label for="tags">Укажите тэги:</label>
+    <input type="text" id="tags" name="tags">
+
+    <input type="submit" value="Create">
+</form>
+{{end}}

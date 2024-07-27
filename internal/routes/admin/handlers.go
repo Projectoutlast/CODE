@@ -18,7 +18,7 @@ func NewAdminHandlers(
 	dish RepositoryDish,
 	log *slog.Logger,
 	menu RepositoryMenu,
-	) *AdminHandlers {
+) *AdminHandlers {
 	return &AdminHandlers{
 		category: category,
 		dish:     dish,

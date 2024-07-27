@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS category_dish (
 CREATE TABLE IF NOT EXISTS dishes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     dish_name VARCHAR UNIQUE NOT NULL,
+    menu_type_id INTEGER NOT NULL,
     category_dish_id INTEGER NOT NULL,
     composition_of_the_dish VARCHAR NOT NULL,
     dish_description VARCHAR,
@@ -21,6 +22,7 @@ CREATE TABLE IF NOT EXISTS dishes (
     dish_image BLOB,
     tags VARCHAR ARRAY,
     FOREIGN KEY (category_dish_id) REFERENCES category_dish(id)
+    FOREIGN KEY (menu_type_id) REFERENCES menu(id)
 );
 
 CREATE TABLE IF NOT EXISTS events (

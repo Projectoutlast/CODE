@@ -11,3 +11,8 @@ type Dish struct {
 	DishImage            []byte
 	Tags                 []string
 }
+
+type CreateDish struct {
+	MenuTypes  []Menu
+	Categories []Category
+}

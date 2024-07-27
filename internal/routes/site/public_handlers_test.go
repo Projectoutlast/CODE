@@ -17,7 +17,7 @@ func TestNewHandlers(t *testing.T) {
 	assert.NotNil(t, h.log)
 }
 
-func TestAbout(t *testing.T) {
+func TestMenuOfCatering(t *testing.T) {
 	handler := &MainHandlers{log: slog.Default()}
 
 	ts := httptest.NewServer(http.HandlerFunc(handler.MenuForCatering))
@@ -100,6 +100,17 @@ func TestNewsAndEvents(t *testing.T) {
 	hadler := &MainHandlers{log: slog.Default()}
 
 	ts := httptest.NewServer(http.HandlerFunc(hadler.NewsAndEvents))
+	defer ts.Close()
+
+	resp, err := http.Get(ts.URL)
+	assert.NoError(t, err)
+	defer resp.Body.Close()
+}
+
+func TestAbout(t *testing.T) {
+	hadler := &MainHandlers{log: slog.Default()}
+
+	ts := httptest.NewServer(http.HandlerFunc(hadler.About))
 	defer ts.Close()
 
 	resp, err := http.Get(ts.URL)
