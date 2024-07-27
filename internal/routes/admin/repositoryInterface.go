@@ -23,4 +23,7 @@ type RepositoryCategory interface {
 type RepositoryDish interface {
 	GetAllDishes() ([]models.Dish, error)
 	CreateNewDish(*models.Dish) error
+	GetDish(int) (*models.Dish, error)
+	UpdateDish(*models.Dish) error
+	DeleteDish(int) error
 }

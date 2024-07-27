@@ -45,7 +45,7 @@
 <script>
     function deleteItem(id) {
         if (confirm("Вы уверены, что хотите удалить этот элемент?")) {
-            fetch(`/admin/menu/category/delete/${id}`, {
+            fetch(`/admin/menu/dish/delete/${id}`, {
                 method: 'DELETE'
             }).then(response => {
                 if (response.ok) {

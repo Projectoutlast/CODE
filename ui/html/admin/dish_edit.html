@@ -1,0 +1,28 @@
+{{template "base" .}}
+
+{{define "title"}}Редактирование блюда{{end}}
+
+{{define "main"}}
+<h2>Редактирование блюда</h2>
+<form action="/admin/menu/dish/edit/{{.ID}}" method="POST">
+    <label for="name">Отредактируйте наименование блюда</label>
+    <input type="text" id="name" name="name" value="{{.Name}}" required>
+
+    <label for="composition">Отредактируйте состав</label>
+    <input type="text" id="composition" name="composition" value="{{.Composition}}" required>
+
+    <label for="description">Отредактируйте описание</label>
+    <input type="text" id="description" name="description" value="{{.Description}}" required>
+
+    <label for="price">Отредактируйте стоимость</label>
+    <input type="number" id="price" name="price" min="0" step="0.01" value="{{.Price}}" required>
+
+    <label for="weight">Отредактируйте вес</label>
+    <input type="number" id="weight" name="weight" min="0" step="1" value="{{.Weight}}" required>
+
+    <label for="tags">Отредактируйте тэги</label>
+    <input type="text" id="tags" name="tags" value="{{.Tags}}">
+
+    <input type="submit" value="Отредактировать">
+</form>
+{{end}}

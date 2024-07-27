@@ -367,3 +367,70 @@ func TestCreateDish(t *testing.T) {
 	err = repo.CreateNewDish(&models.Dish{})
 	assert.Error(t, err)
 }
+
+func TestGetDish(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
+
+	repo := NewSQLiteRepository(slog.Default(), db)
+
+	rows := sqlmock.NewRows([]string{
+		"id",
+		"dish_name",
+		"menu_type_id",
+		"category_dish_id",
+		"composition_of_the_dish",
+		"dish_description",
+		"price",
+		"dish_weight",
+		"dish_image",
+		"tags",
+	}).
+		AddRow(1, "Beef Burger", 1, 1, "Beef, cheese, lettuce", "Beef with cheese and lettuce", 1000, 500, []byte{}, "Beef, Cheese, Lettuce")
+
+	mock.ExpectQuery(`SELECT \* FROM dishes WHERE id = \?`).
+	WithArgs(1).
+	WillReturnRows(rows)
+
+	dishes, err := repo.GetDish(1)
+	assert.NoError(t, err)
+	assert.NotNil(t, dishes)
+
+	mock.ExpectQuery(`SELECT \* FROM dishes WHERE id = \?`).WillReturnError(fmt.Errorf("no rows in result set"))
+
+	_, err = repo.GetAllDishes()
+	assert.Error(t, err)
+}
+
+func TestUpdateDish(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
+
+	repo := NewSQLiteRepository(slog.Default(), db)
+
+	mock.ExpectExec(`UPDATE dishes SET dish_name = \?, composition_of_the_dish = \?, dish_description = \?, price = \?, dish_weight = \?, tags = \? WHERE id = \?`).
+		WithArgs("Beef Burger", "Beef, cheese, lettuce", "Beef with cheese and lettuce", 10.00, 500, "Beef, Cheese, Lettuce", 1).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+
+	dish := &models.Dish{
+		ID: 1,
+		Name: "Beef Burger",
+		Composition: "Beef, cheese, lettuce",
+		Description: "Beef with cheese and lettuce",
+		Price: 10.00,
+		Weight: 500,
+		Tags: "Beef, Cheese, Lettuce",
+	}
+
+	err = repo.UpdateDish(dish)
+	assert.NoError(t, err)
+
+	mock.ExpectExec(`UPDATE dishes SET dish_name = \?, composition_of_the_dish = \?, dish_description = \?, price = \?, dish_weight = \?, tags = \? WHERE id = \?`).
+		WithArgs().
+		WillReturnError(fmt.Errorf("some error occured"))
+	
+	err = repo.UpdateDish(&models.Dish{})
+	assert.Error(t, err)
+}

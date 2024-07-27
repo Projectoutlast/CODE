@@ -74,3 +74,74 @@ func (r *SQLiteRepository) CreateNewDish(dish *models.Dish) error {
 
 	return err
 }
+
+func (r *SQLiteRepository) GetDish(dishID int) (*models.Dish, error) {
+	stmt := `SELECT * FROM dishes WHERE id = ?`
+
+	row := r.db.QueryRow(stmt, dishID)
+	if err := row.Err(); err != nil {
+		r.log.Error(err.Error())
+		return nil, err
+	}
+
+	var dish models.Dish
+	var tags string
+	if err := row.Scan(
+		&dish.ID,
+		&dish.Name,
+		&dish.MenuTypeID,
+		&dish.CategoryDishID,
+		&dish.Composition,
+		&dish.Description,
+		&dish.Price,
+		&dish.Weight,
+		&dish.Image,
+		&tags,
+	); err != nil {
+		r.log.Error(err.Error())
+		return nil, err
+	}
+
+	return &dish, nil
+}
+
+func (r *SQLiteRepository) UpdateDish(dish *models.Dish) error {
+	stmt := `UPDATE dishes SET
+		dish_name = ?,
+		composition_of_the_dish = ?,
+		dish_description = ?,
+		price = ?,
+		dish_weight = ?,
+		tags = ?
+		WHERE id = ?`
+
+	_, err := r.db.Exec(
+		stmt,
+		dish.Name,
+		dish.Composition,
+		dish.Description,
+		dish.Price,
+		dish.Weight,
+		dish.Tags,
+		dish.ID,
+	)
+
+	if err != nil {
+		r.log.Error(err.Error())
+		return err
+	}
+
+	return nil
+}
+
+func (r *SQLiteRepository) DeleteDish(dishID int) error {
+	stmt := `DELETE FROM dishes WHERE id = ?`
+
+	_, err := r.db.Exec(stmt, dishID)
+	if err != nil {
+		r.log.Error(err.Error())
+		return err
+	}
+
+	return nil
+}
