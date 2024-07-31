@@ -31,7 +31,7 @@ func TestSetUpRoutes(t *testing.T) {
 	sqliteRepository := sqlite.NewSQLiteRepository(logger, db)
 
 	siteHandlers := site.NewMainHandlers(logger)
-	adminHandlers := admin.NewAdminHandlers(sqliteRepository, sqliteRepository, logger, sqliteRepository)
+	adminHandlers := admin.NewAdminHandlers(sqliteRepository, sqliteRepository, logger, sqliteRepository, sqliteRepository)
 
 	middlewares := middleware.NewMiddleware(logger)
 

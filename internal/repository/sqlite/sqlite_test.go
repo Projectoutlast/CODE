@@ -335,18 +335,18 @@ func TestCreateDish(t *testing.T) {
 	price, 
 	dish_weight,
 	tags\) VALUES \(\?, \?, \?, \?, \?, \?, \?, \?\)`).
-	WithArgs("Beef Burger", 1, 1, "Beef, cheese, lettuce", "Beef with cheese and lettuce", 10.00, 500, "Beef, Cheese, Lettuce").
-	WillReturnResult(sqlmock.NewResult(1, 1))
+		WithArgs("Beef Burger", 1, 1, "Beef, cheese, lettuce", "Beef with cheese and lettuce", 10.00, 500, "Beef, Cheese, Lettuce").
+		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	newDish := &models.Dish{
-		Name: "Beef Burger",
+		Name:           "Beef Burger",
 		CategoryDishID: 1,
-		MenuTypeID: 1,
-		Composition: "Beef, cheese, lettuce",
-		Description: "Beef with cheese and lettuce",
-		Price: 10.00,
-		Weight: 500,
-		Tags: "Beef, Cheese, Lettuce",
+		MenuTypeID:     1,
+		Composition:    "Beef, cheese, lettuce",
+		Description:    "Beef with cheese and lettuce",
+		Price:          10.00,
+		Weight:         500,
+		Tags:           "Beef, Cheese, Lettuce",
 	}
 	err = repo.CreateNewDish(newDish)
 
@@ -390,8 +390,8 @@ func TestGetDish(t *testing.T) {
 		AddRow(1, "Beef Burger", 1, 1, "Beef, cheese, lettuce", "Beef with cheese and lettuce", 1000, 500, []byte{}, "Beef, Cheese, Lettuce")
 
 	mock.ExpectQuery(`SELECT \* FROM dishes WHERE id = \?`).
-	WithArgs(1).
-	WillReturnRows(rows)
+		WithArgs(1).
+		WillReturnRows(rows)
 
 	dishes, err := repo.GetDish(1)
 	assert.NoError(t, err)
@@ -415,13 +415,13 @@ func TestUpdateDish(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	dish := &models.Dish{
-		ID: 1,
-		Name: "Beef Burger",
+		ID:          1,
+		Name:        "Beef Burger",
 		Composition: "Beef, cheese, lettuce",
 		Description: "Beef with cheese and lettuce",
-		Price: 10.00,
-		Weight: 500,
-		Tags: "Beef, Cheese, Lettuce",
+		Price:       10.00,
+		Weight:      500,
+		Tags:        "Beef, Cheese, Lettuce",
 	}
 
 	err = repo.UpdateDish(dish)
@@ -430,7 +430,77 @@ func TestUpdateDish(t *testing.T) {
 	mock.ExpectExec(`UPDATE dishes SET dish_name = \?, composition_of_the_dish = \?, dish_description = \?, price = \?, dish_weight = \?, tags = \? WHERE id = \?`).
 		WithArgs().
 		WillReturnError(fmt.Errorf("some error occured"))
-	
+
 	err = repo.UpdateDish(&models.Dish{})
+	assert.Error(t, err)
+}
+
+func TestGetAllUsers(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
+
+	repo := NewSQLiteRepository(slog.Default(), db)
+
+	mock.ExpectQuery(`SELECT
+		id, user_login, email, firstname, lastname, user_role, create_date, update_date
+	FROM
+		admin_panel_users`).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "user_login", "email", "firstname", "lastname", "user_role", "create_date", "update_date"}).
+			AddRow(1, "Any", "test@example.com", "John", "Doe", "менеджер", "2024-07-31 00:00:00", "2024-07-31 12:00:00").
+			AddRow(1, "Many", "best@example.com", "Jean", "Doe", "управляющий", "2024-07-31 00:00:00", "2024-07-31 12:00:00"))
+
+	users, err := repo.GetAllUsers()
+	assert.NoError(t, err)
+	assert.NotNil(t, users)
+	assert.Len(t, users, 2)
+	assert.Equal(t, "test@example.com", (users)[0].Email)
+	assert.Equal(t, "Many", (users)[1].Login)
+	assert.NoError(t, mock.ExpectationsWereMet())
+
+	mock.ExpectQuery(`SELECT
+		id, user_login, email, firstname, lastname, user_role, create_date, update_date
+	FROM
+		admin_panel_users`).
+		WillReturnError(fmt.Errorf("no rows in result set"))
+
+	users, err = repo.GetAllUsers()
+	assert.Error(t, err)
+	assert.Nil(t, users)
+	assert.Len(t, users, 0)
+}
+
+func TestRegisterUser(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
+
+	repo := NewSQLiteRepository(slog.Default(), db)
+
+	mock.ExpectExec(`INSERT INTO admin_panel_users \(
+		user_login, user_password, email, firstname, lastname\) VALUES \(
+		\?, \?, \?, \?, \?\)`).
+		WithArgs("Any", "somepass", "test@example.com", "John", "Doe").
+		WillReturnResult(sqlmock.NewResult(1, 1))
+
+	user := &models.User{
+		Login:     "Any",
+		PasswordHash:  "somepass",
+		Email:     "test@example.com",
+		Firstname: "John",
+		Lastname:  "Doe",
+	}
+	err = repo.RegisterUser(user)
+
+	assert.NoError(t, err)
+
+	mock.ExpectExec(`INSERT INTO admin_panel_users \(
+		user_login, user_password, email, firstname, lastname\) VALUES \(
+		\?, \?, \?, \?, \?\)`).
+		WithArgs("Any", "somepass", "test@example.com", "John", "Doe").
+		WillReturnError(fmt.Errorf("no rows in result set"))
+
+	err = repo.RegisterUser(user)
+
 	assert.Error(t, err)
 }

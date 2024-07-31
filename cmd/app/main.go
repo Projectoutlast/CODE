@@ -41,7 +41,7 @@ func main() {
 	sqliteRepository := sqlite.NewSQLiteRepository(newLogger, db)
 
 	siteHandlers := site.NewMainHandlers(newLogger)
-	adminHandlers := admin.NewAdminHandlers(sqliteRepository, sqliteRepository, newLogger, sqliteRepository)
+	adminHandlers := admin.NewAdminHandlers(sqliteRepository, sqliteRepository, newLogger, sqliteRepository, sqliteRepository)
 
 	middlewares := middleware.NewMiddleware(newLogger)
 

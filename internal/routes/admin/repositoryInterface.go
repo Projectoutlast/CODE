@@ -27,3 +27,11 @@ type RepositoryDish interface {
 	UpdateDish(*models.Dish) error
 	DeleteDish(int) error
 }
+
+type RepositoryEmployee interface {
+	GetAllUsers() ([]models.User, error)
+	RegisterUser(*models.User) error
+	ViewUser(int) (*models.User, error)
+	UpdateUser(*models.User) error
+	DeleteUser(int) error
+}

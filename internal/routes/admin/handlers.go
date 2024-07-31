@@ -11,6 +11,7 @@ type AdminHandlers struct {
 	dish     RepositoryDish
 	log      *slog.Logger
 	menu     RepositoryMenu
+	employee RepositoryEmployee
 }
 
 func NewAdminHandlers(
@@ -18,11 +19,13 @@ func NewAdminHandlers(
 	dish RepositoryDish,
 	log *slog.Logger,
 	menu RepositoryMenu,
+	employee RepositoryEmployee,
 ) *AdminHandlers {
 	return &AdminHandlers{
 		category: category,
 		dish:     dish,
 		log:      log,
 		menu:     menu,
+		employee: employee,
 	}
 }
