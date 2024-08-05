@@ -48,6 +48,10 @@ func SetUpRoutes(
 	r.HandleFunc("/admin/menu/dish/edit/{dish_id}", middleware.Logging(adminHandlers.DishEdit)).Methods("GET")
 	r.HandleFunc("/admin/menu/dish/edit/{dish_id}", middleware.Logging(adminHandlers.DishEditProcess)).Methods("POST")
 	r.HandleFunc("/admin/menu/dish/delete/{dish_id}", middleware.Logging(adminHandlers.DeleteDish)).Methods("DELETE")
+
+	r.HandleFunc("/admin/employees", middleware.Logging(adminHandlers.Employees)).Methods("GET")
+	r.HandleFunc("/admin/employees/create", middleware.Logging(adminHandlers.CreateEmployee)).Methods("GET")
+	r.HandleFunc("/admin/employees/create", middleware.Logging(adminHandlers.CreateEmployeeProcess)).Methods("POST")
 }
 
 func SetUpFileServer(r *mux.Router, pathToStatic string) {

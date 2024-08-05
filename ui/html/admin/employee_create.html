@@ -1,0 +1,26 @@
+{{template "base" .}}
+
+{{define "title"}}Регистрация нового сотрудника{{end}}
+
+{{define "main"}}
+<h2>Регистрация нового сотрудника</h2>
+<form action="/admin/employees/create" method="POST">
+
+    <label for="login">Введите логин:</label>
+    <input type="text" id="login" name="login" required>
+
+    <label for="password">Введите пароль:</label>
+    <input type="text" id="password" name="password" required>
+
+    <label for="email">Введите электронную почту:</label>
+    <input type="text" id="email" name="email" required>
+
+    <label for="firstname">Введите имя:</label>
+    <input type="text" id="firstname" name="firstname" required>
+
+    <label for="lastname">Введите фамилию:</label>
+    <input type="text" id="lastname" name="lastname">
+
+    <input type="submit" value="Зарегистрировать">
+</form>
+{{end}}

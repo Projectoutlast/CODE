@@ -484,11 +484,11 @@ func TestRegisterUser(t *testing.T) {
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	user := &models.User{
-		Login:     "Any",
-		PasswordHash:  "somepass",
-		Email:     "test@example.com",
-		Firstname: "John",
-		Lastname:  "Doe",
+		Login:        "Any",
+		PasswordHash: "somepass",
+		Email:        "test@example.com",
+		Firstname:    "John",
+		Lastname:     "Doe",
 	}
 	err = repo.RegisterUser(user)
 
@@ -502,5 +502,95 @@ func TestRegisterUser(t *testing.T) {
 
 	err = repo.RegisterUser(user)
 
+	assert.Error(t, err)
+}
+
+func TestViewUser(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
+
+	repo := NewSQLiteRepository(slog.Default(), db)
+
+	mock.ExpectQuery(`SELECT
+		id, user_login, email, firstname, lastname, user_role, create_date, update_date
+	FROM
+		admin_panel_users WHERE id = \?`).
+		WithArgs(1).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "user_login", "email", "firstname", "lastname", "user_role", "create_date", "update_date"}).
+			AddRow(1, "Any", "test@example.com", "John", "Doe", "менеджер", "2024-07-31 00:00:00", "2024-07-31 12:00:00"))
+
+	user, err := repo.ViewUser(1)
+	assert.NoError(t, err)
+	assert.NotNil(t, user)
+	assert.Equal(t, "test@example.com", user.Email)
+	assert.NoError(t, mock.ExpectationsWereMet())
+
+	mock.ExpectQuery(`SELECT
+		id, user_login, email, firstname, lastname, user_role, create_date, update_date
+	FROM
+		admin_panel_users WHERE id = \?`).
+		WithArgs(1).
+		WillReturnError(fmt.Errorf("no rows in result set"))
+
+	user, err = repo.ViewUser(1)
+	assert.Error(t, err)
+	assert.Nil(t, user)
+}
+
+func TestUpdateUser(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
+
+	repo := NewSQLiteRepository(slog.Default(), db)
+
+	mock.ExpectExec(`UPDATE admin_panel_users
+	SET user_login = \?, email = \?, firstname = \?, lastname = \?
+	WHERE id = \?`).
+		WithArgs("Any", "test@example.com", "John", "Doe", 1).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+
+	user := &models.User{
+		ID:        1,
+		Login:     "Any",
+		Email:     "test@example.com",
+		Firstname: "John",
+		Lastname:  "Doe",
+	}
+	err = repo.UpdateUser(user)
+
+	assert.NoError(t, err)
+
+	mock.ExpectExec(`UPDATE admin_panel_users
+	SET user_login = \?, email = \?, firstname = \?, lastname = \?
+	WHERE id = \?`).
+		WithArgs("Any", "test@example.com", "John", "Doe", 1).
+		WillReturnError(fmt.Errorf("no rows in result set"))
+
+	err = repo.UpdateUser(user)
+
+	assert.Error(t, err)
+}
+
+func TestDeleteUser(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	assert.NoError(t, err)
+	defer db.Close()
+
+	repo := NewSQLiteRepository(slog.Default(), db)
+
+	mock.ExpectExec(`DELETE admin_panel_users WHERE id = ?`).
+		WithArgs(1).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+
+	err = repo.DeleteUser(1)
+	assert.NoError(t, err)
+
+	mock.ExpectExec(`DELETE FROM admin_panel_users WHERE id = \?`).
+		WithArgs(1).
+		WillReturnError(fmt.Errorf("no rows in result set"))
+
+	err = repo.DeleteUser(1)
 	assert.Error(t, err)
 }
