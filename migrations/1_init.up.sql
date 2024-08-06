@@ -7,12 +7,12 @@ CREATE TABLE IF NOT EXISTS category_dish (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     menu_type_id INTEGER NOT NULL,
     category_name VARCHAR UNIQUE NOT NULL,
-    FOREIGN KEY (menu_type_id) REFERENCES menu(id)
+    FOREIGN KEY (menu_type_id) REFERENCES menu(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS dishes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    dish_name VARCHAR UNIQUE NOT NULL,
+    dish_name VARCHAR NOT NULL,
     menu_type_id INTEGER NOT NULL,
     category_dish_id INTEGER NOT NULL,
     composition_of_the_dish VARCHAR NOT NULL,
@@ -21,16 +21,8 @@ CREATE TABLE IF NOT EXISTS dishes (
     dish_weight INTEGER NOT NULL,
     dish_image BLOB,
     tags VARCHAR ARRAY,
-    FOREIGN KEY (category_dish_id) REFERENCES category_dish(id)
-    FOREIGN KEY (menu_type_id) REFERENCES menu(id)
-);
-
-CREATE TABLE IF NOT EXISTS events (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    event_name VARCHAR NOT NULL,
-    event_description VARCHAR,
-    event_date TIMESTAMP DEFAULT current_timestamp,
-    event_time TIMESTAMP DEFAULT current_timestamp
+    FOREIGN KEY (category_dish_id) REFERENCES category_dish(id) ON DELETE CASCADE,
+    FOREIGN KEY (menu_type_id) REFERENCES menu(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS admin_panel_users (

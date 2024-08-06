@@ -27,3 +27,5 @@ go.work.sum
 
 coverdetails.go
 coverage.out
+
+fillDB/
