@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS menu (
 CREATE TABLE IF NOT EXISTS category_dish (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     menu_type_id INTEGER NOT NULL,
-    category_name VARCHAR UNIQUE NOT NULL,
-    FOREIGN KEY (menu_type_id) REFERENCES menu(id) ON DELETE CASCADE
+    category_name VARCHAR NOT NULL,
+    FOREIGN KEY (menu_type_id) REFERENCES menu(id)
 );
 
 CREATE TABLE IF NOT EXISTS dishes (
@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS dishes (
     dish_weight INTEGER NOT NULL,
     dish_image BLOB,
     tags VARCHAR ARRAY,
-    FOREIGN KEY (category_dish_id) REFERENCES category_dish(id) ON DELETE CASCADE,
-    FOREIGN KEY (menu_type_id) REFERENCES menu(id) ON DELETE CASCADE
+    FOREIGN KEY (category_dish_id) REFERENCES category_dish(id),
+    FOREIGN KEY (menu_type_id) REFERENCES menu(id)
 );
 
 CREATE TABLE IF NOT EXISTS admin_panel_users (
